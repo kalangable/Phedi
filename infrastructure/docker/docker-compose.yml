@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: phedi-postgres
+    environment:
+      POSTGRES_DB: phedi
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      -  phedi-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d phedi"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy   # só sobe o app quando o Postgres estiver pronto
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: phedi
+      DB_USER: postgres
+      DB_PASS: postgres
+    ports:
+      - "8080:8080"
+
+volumes:
+   phedi-data:
