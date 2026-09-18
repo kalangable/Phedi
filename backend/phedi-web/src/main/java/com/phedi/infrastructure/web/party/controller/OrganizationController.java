@@ -1,15 +1,20 @@
 package com.phedi.infrastructure.web.party.controller;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.phedi.application.party.organization.OrganizationService;
 import com.phedi.domain.party.model.PartyIdentifier;
+import com.phedi.infrastructure.web.party.dto.CreateOrganizationRequest;
 import com.phedi.infrastructure.web.party.dto.OrganizationResponse;
 import com.phedi.infrastructure.web.party.mapper.OrganizationDomainMapper;
 
@@ -24,15 +29,23 @@ public class OrganizationController {
     private final OrganizationDomainMapper mapper;
 
     @GetMapping
-    public ResponseEntity<List<OrganizationResponse>> listAll() {
+    public ResponseEntity<List<OrganizationResponse>> get() {
         var result = organizationService.findAll().stream().map(mapper::toDto).toList();
 
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{partyIdentifier}")
-    public ResponseEntity<OrganizationResponse> getOrganization(@PathVariable PartyIdentifier partyIdentifier) {
+    public ResponseEntity<OrganizationResponse> get(@PathVariable PartyIdentifier partyIdentifier) {
         var result = organizationService.findById(partyIdentifier);
         return ResponseEntity.ok(mapper.toDto(result));
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> add(@RequestBody CreateOrganizationRequest organizationRequest) throws URISyntaxException {
+        var domain = mapper.toDomain(organizationRequest);
+        var organizationCreated = organizationService.create(domain);
+        var location = String.format("organizations/%s", organizationCreated.getPartyIdentifier());
+        return ResponseEntity.created(new URI(location)).build();
     }
 }
