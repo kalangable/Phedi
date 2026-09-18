@@ -1,7 +1,5 @@
 package com.phedi.infrastructure.persistence.party.generator;
 
-import java.math.BigInteger;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +18,7 @@ public class PartyNumberSequenceGenerator implements PartyIdentifierGenerator {
     @Override
     @Transactional
     public PartyIdentifier generate() {
-        BigInteger nextVal = (BigInteger) entityManager
+        Number nextVal = (Number) entityManager
                 .createNativeQuery("SELECT nextval('party_number_seq')")
                 .getSingleResult();
 
