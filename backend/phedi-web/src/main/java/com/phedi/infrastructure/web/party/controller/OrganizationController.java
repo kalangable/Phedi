@@ -1,7 +1,5 @@
 package com.phedi.infrastructure.web.party.controller;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.phedi.application.party.organization.OrganizationService;
 import com.phedi.domain.party.model.PartyIdentifier;
+import com.phedi.infrastructure.web.common.ResourceLocationBuilder;
 import com.phedi.infrastructure.web.party.dto.CreateOrganizationRequest;
 import com.phedi.infrastructure.web.party.dto.OrganizationResponse;
 import com.phedi.infrastructure.web.party.mapper.OrganizationDomainMapper;
@@ -27,6 +26,7 @@ public class OrganizationController {
 
     private final OrganizationService organizationService;
     private final OrganizationDomainMapper mapper;
+    private final ResourceLocationBuilder locationBuilder;
 
     @GetMapping
     public ResponseEntity<List<OrganizationResponse>> get() {
@@ -42,10 +42,10 @@ public class OrganizationController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> add(@RequestBody CreateOrganizationRequest organizationRequest) throws URISyntaxException {
+    public ResponseEntity<Void> add(@RequestBody CreateOrganizationRequest organizationRequest) {
         var domain = mapper.toDomain(organizationRequest);
         var organizationCreated = organizationService.create(domain);
-        var location = String.format("organizations/%s", organizationCreated.getPartyIdentifier());
-        return ResponseEntity.created(new URI(location)).build();
+        var location = locationBuilder.build(organizationCreated.getPartyIdentifier());
+        return ResponseEntity.created(location).build();
     }
 }
