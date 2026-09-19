@@ -3,6 +3,11 @@
 # ==============================================================================
 
 spring:
+  devtools:
+    restart:
+      quiet-period: 3s
+      poll-interval: 4s
+
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:phedi}
     username: ${DB_USERNAME:postgres}
