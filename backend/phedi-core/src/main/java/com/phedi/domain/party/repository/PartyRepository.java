@@ -20,6 +20,4 @@ public interface PartyRepository<E extends Party> {
 
     void deactivate(String partyNumber);
 
-    
-
 }
