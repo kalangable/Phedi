@@ -7,7 +7,7 @@ import com.phedi.domain.party.model.PartyIdentifier;
 
 public interface OrganizationQueryService {
 
-    Organization findById(PartyIdentifier partyIdentifier);
+    Organization findByIdentifier(PartyIdentifier partyIdentifier);
 
     List<Organization> findAll();
 
