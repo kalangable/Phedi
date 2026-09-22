@@ -17,6 +17,7 @@ import com.phedi.domain.party.model.PartyIdentifier;
 import com.phedi.infrastructure.web.common.ResourceLocationBuilder;
 import com.phedi.infrastructure.web.party.dto.CreateOrganizationRequest;
 import com.phedi.infrastructure.web.party.dto.OrganizationResponse;
+import com.phedi.infrastructure.web.party.dto.UpdateOrganizationRequest;
 import com.phedi.infrastructure.web.party.mapper.OrganizationDomainMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ public class OrganizationController {
 
     @GetMapping("/{partyIdentifier}")
     public ResponseEntity<OrganizationResponse> get(@PathVariable PartyIdentifier partyIdentifier) {
-        var result = organizationService.findById(partyIdentifier);
+        var result = organizationService.findByIdentifier(partyIdentifier);
         return ResponseEntity.ok(mapper.toDto(result));
     }
 
@@ -49,6 +50,13 @@ public class OrganizationController {
         var organizationCreated = organizationService.create(domain);
         var location = locationBuilder.build(organizationCreated.getPartyIdentifier());
         return ResponseEntity.created(location).build();
+    }
+
+    @PutMapping("/{partyIdentifier}")
+    public ResponseEntity<Void> update(@PathVariable PartyIdentifier partyIdentifier, @RequestBody UpdateOrganizationRequest updatedOrganization){
+        var domain = mapper.toDomain(partyIdentifier.value(), updatedOrganization);
+        organizationService.update(domain);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{partyIdentifier}")

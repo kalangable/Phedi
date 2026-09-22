@@ -2,6 +2,7 @@ package com.phedi.infrastructure.persistence.party.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import com.phedi.domain.party.model.Organization;
 import com.phedi.infrastructure.persistence.party.entity.OrganizationEntity;
@@ -22,5 +23,13 @@ public interface OrganizationPersistenceMapper extends PartyPersistenceMapper<Or
     @Override
     @Mapping(target = "partyIdentifier", source = "partyNumber")
     Organization toDomain(OrganizationEntity entity);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "partyNumber", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "isDeleted", ignore = true)
+    @Mapping(target = "deletedAt", ignore = true)
+    void updateEntity(Organization domain, @MappingTarget OrganizationEntity entity);
 
 }

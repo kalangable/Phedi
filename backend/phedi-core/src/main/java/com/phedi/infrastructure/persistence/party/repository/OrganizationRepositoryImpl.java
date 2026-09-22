@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.phedi.domain.party.model.Organization;
 import com.phedi.domain.party.repository.OrganizationRepository;
+import com.phedi.domain.party.service.PartyIdentifierGenerator;
 import com.phedi.infrastructure.persistence.party.entity.OrganizationEntity;
 import com.phedi.infrastructure.persistence.party.mapper.OrganizationPersistenceMapper;
 
@@ -16,9 +17,10 @@ public class OrganizationRepositoryImpl extends PartyRepositoryImpl<Organization
     public OrganizationRepositoryImpl(
             PartyJpaRepository partyJpaRepository,
             OrganizationJpaRepository jpaRepository,
-            OrganizationPersistenceMapper mapper) {
+            OrganizationPersistenceMapper mapper,
+            PartyIdentifierGenerator partyIdentifierGenerator) {
 
-        super(partyJpaRepository, jpaRepository, mapper);
+        super(partyJpaRepository, jpaRepository, partyIdentifierGenerator, mapper);
         this.jpaRepository = jpaRepository;
     }
 
@@ -30,7 +32,6 @@ public class OrganizationRepositoryImpl extends PartyRepositoryImpl<Organization
                 .stream().map(mapper::toDomain)
                 .toList();
     }
-
     
     @Override
     public List<Organization> findByLegalName(String legalName) {
@@ -40,12 +41,9 @@ public class OrganizationRepositoryImpl extends PartyRepositoryImpl<Organization
     }
 
     @Override
-    public Boolean existsByIdentificationTypeAndIdentificationNumber(String identificationType,
-            String identificationNumber) {
-        return jpaRepository.existsByIdentificationTypeAndIdentificationNumber(identificationType,
-                identificationNumber);
+    public Boolean existsByIdentificationTypeAndIdentificationNumber(String identificationType, String identificationNumber) {
+        return jpaRepository.existsByIdentificationTypeAndIdentificationNumber(identificationType, identificationNumber);
     }
-
 
     @Override
     public Optional<Organization> findByIdentification(String identificationType, String identificationNumber) {

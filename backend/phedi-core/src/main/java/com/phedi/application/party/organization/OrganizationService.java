@@ -10,11 +10,12 @@ import com.phedi.domain.party.exception.InvalidIdentificationException;
 import com.phedi.domain.party.model.Organization;
 import com.phedi.domain.party.model.PartyIdentifier;
 import com.phedi.domain.party.repository.OrganizationRepository;
-import com.phedi.domain.party.service.PartyIdentifierGenerator;
 import com.phedi.domain.party.validation.IdentificationValidationService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j 
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -22,7 +23,6 @@ public class OrganizationService implements OrganizationCreationService, Organiz
         OrganizationDeletionService, OrganizationQueryService, OrganizationStatusChangeService {
 
     private final OrganizationRepository organizationRepository;
-    private final PartyIdentifierGenerator partyIdentifierGenerator;
     private final IdentificationValidationService validationService;
 
     @Override
@@ -31,13 +31,12 @@ public class OrganizationService implements OrganizationCreationService, Organiz
         validateIdentification(organization.getIdentificationType(), organization.getIdentificationNumber());
         checkDuplicateIdentification(organization.getIdentificationType(), organization.getIdentificationNumber());
 
-        organization.setPartyIdentifier(partyIdentifierGenerator.generate());
-        return organizationRepository.save(organization);
+        return organizationRepository.insert(organization);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Organization findById(PartyIdentifier partyIdentifier) {
+    public Organization findByIdentifier(PartyIdentifier partyIdentifier) {
         return organizationRepository.findByPartyIdentifier(partyIdentifier)
                 .orElseThrow(() -> new RuntimeException(String.format("Organization not found")));
     }
@@ -58,36 +57,29 @@ public class OrganizationService implements OrganizationCreationService, Organiz
 
     @Override
     public Organization update(Organization updatedOrganization) {
-        Organization existingOrganization = findById(updatedOrganization.getPartyIdentifier());
+
+        Organization existingOrganization = findByIdentifier(updatedOrganization.getPartyIdentifier());
 
         // Validate new identification if changed
+        checkUpdateRoles(updatedOrganization, existingOrganization);
+
+        return organizationRepository.update(updatedOrganization);
+    }
+
+    protected void checkUpdateRoles(Organization updatedOrganization, Organization existingOrganization) {
+
+        log.info("Compare Organizations [{}] [{}]", updatedOrganization, existingOrganization);
         if (updatedOrganization.getIdentificationType() != null &&
                 updatedOrganization.getIdentificationNumber() != null) {
 
-            boolean identificationChanged = !updatedOrganization.getIdentificationType()
-                    .equals(existingOrganization.getIdentificationType()) ||
-                    !updatedOrganization.getIdentificationNumber()
-                            .equals(existingOrganization.getIdentificationNumber());
+            boolean identificationChanged = !updatedOrganization.getIdentificationType().equals(existingOrganization.getIdentificationType()) 
+                || !updatedOrganization.getIdentificationNumber().equals(existingOrganization.getIdentificationNumber());
 
             if (identificationChanged) {
-                validateIdentification(updatedOrganization.getIdentificationType(),
-                        updatedOrganization.getIdentificationNumber());
-                checkDuplicateIdentification(updatedOrganization.getIdentificationType(),
-                        updatedOrganization.getIdentificationNumber());
+                validateIdentification(updatedOrganization.getIdentificationType(), updatedOrganization.getIdentificationNumber());
+                checkDuplicateIdentification(updatedOrganization.getIdentificationType(), updatedOrganization.getIdentificationNumber());
             }
-
         }
-
-        // Update fields
-        existingOrganization.setLegalName(updatedOrganization.getLegalName());
-        existingOrganization.setTradeName(updatedOrganization.getTradeName());
-        existingOrganization.setBrandName(updatedOrganization.getBrandName());
-        existingOrganization.setFoundingDate(updatedOrganization.getFoundingDate());
-        existingOrganization.setIdentificationType(updatedOrganization.getIdentificationType());
-        existingOrganization.setIdentificationNumber(updatedOrganization.getIdentificationNumber());
-        existingOrganization.setIsActive(updatedOrganization.getIsActive());
-
-        return organizationRepository.save(existingOrganization);
     }
 
     @Override

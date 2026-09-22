@@ -6,15 +6,17 @@ import java.util.Optional;
 import com.phedi.domain.party.model.Party;
 import com.phedi.domain.party.model.PartyIdentifier;
 
-public interface PartyRepository<E extends Party> {
+public interface PartyRepository<DOMAIN extends Party> {
 
-    E save(E domain);
+    DOMAIN insert(DOMAIN domain);
+
+    DOMAIN update(DOMAIN domain);
 
     void deleteByPartyIdentifier(PartyIdentifier partyIdentifier);
 
-    Optional<E> findByPartyIdentifier(PartyIdentifier partyIdentifier);
+    Optional<DOMAIN> findByPartyIdentifier(PartyIdentifier partyIdentifier);
 
-    List<E> findAll();
+    List<DOMAIN> findAll();
 
     void activate(String partyNumber);
 
