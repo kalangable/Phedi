@@ -1,0 +1,31 @@
+# ==============================================================================
+# Ambiente de Desenvolvimento
+# ==============================================================================
+
+spring:
+  devtools:
+    restart:
+      quiet-period: 3s
+      poll-interval: 4s
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:phedi}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    show-sql: false
+    open-in-view: false
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.phedi: INFO
+    org.hibernate.SQL: DEBUG
+    liquibase: INFO
