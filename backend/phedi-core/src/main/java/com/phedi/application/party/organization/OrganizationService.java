@@ -89,7 +89,7 @@ public class OrganizationService implements OrganizationCreationService, Organiz
 
     @Override
     public void activate(PartyIdentifier partyIdentifier) {
-        organizationRepository.deactivate(partyIdentifier.value());
+        organizationRepository.activate(partyIdentifier.value());
     }
 
     @Override
