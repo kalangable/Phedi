@@ -30,6 +30,7 @@ public interface OrganizationPersistenceMapper extends PartyPersistenceMapper<Or
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "isDeleted", ignore = true)
     @Mapping(target = "deletedAt", ignore = true)
+    @Mapping(target = "isActive", ignore = true)
     void updateEntity(Organization domain, @MappingTarget OrganizationEntity entity);
 
 }

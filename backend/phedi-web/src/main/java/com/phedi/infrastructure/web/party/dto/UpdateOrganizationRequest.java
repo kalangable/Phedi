@@ -29,6 +29,4 @@ public class UpdateOrganizationRequest {
     @Size(max = 50)
     private String identificationNumber;
 
-    private Boolean isActive;
-
 }
