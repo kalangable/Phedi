@@ -9,6 +9,8 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import com.phedi.domain.party.model.PartyType;
+
 @Entity 
 @Table (name = "organization")
 @PrimaryKeyJoinColumn (name = "id")

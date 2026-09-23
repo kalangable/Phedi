@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,6 +16,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import com.phedi.domain.party.model.DocumentType;
 
 @Entity
 @Table(name = "party_identity_document")
@@ -57,8 +61,9 @@ public class PartyIdentityDocumentEntity {
      * CPF, CNPJ, RG, PASSPORT, VAT,
      * STATE_TAX_REGISTRATION, etc.
      */
+    @Enumerated(EnumType.STRING)
     @Column(name = "document_type", nullable = false, length = 30)
-    private String documentType;
+    private DocumentType documentType;
 
     /**
      * Número ou valor do documento.

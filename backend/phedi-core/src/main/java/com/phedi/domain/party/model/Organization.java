@@ -9,6 +9,10 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class Organization extends Party {
 
+    public Organization() {
+        super(PartyType.ORGANIZATION);
+    }
+
     private String legalName;
 
     private String tradeName;

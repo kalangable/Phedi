@@ -8,6 +8,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+import com.phedi.domain.party.model.PartyType;
+
 @Entity
 @Table(name = "party")
 @Inheritance(strategy = InheritanceType.JOINED)

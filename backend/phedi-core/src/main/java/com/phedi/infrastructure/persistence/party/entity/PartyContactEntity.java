@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,6 +15,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import com.phedi.domain.party.model.ContactType;
 
 @Entity
 @Table(name = "party_contact")
@@ -56,8 +60,9 @@ public class PartyContactEntity {
      * EMAIL, PHONE, MOBILE, LANDLINE,
      * WHATSAPP, FAX, WEBSITE, OTHER.
      */
+    @Enumerated(EnumType.STRING)
     @Column(name = "contact_type", nullable = false, length = 30)
-    private String contactType;
+    private ContactType contactType;
 
     /**
      * Finalidade/contexto do contato.

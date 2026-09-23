@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 
+import com.phedi.domain.party.model.PartyType;
+
 @Entity
 @Table(name = "person")
 @PrimaryKeyJoinColumn(name = "id")

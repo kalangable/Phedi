@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,6 +15,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import com.phedi.domain.party.model.AddressType;
 
 @Entity
 @Table(name = "party_address")
@@ -56,8 +60,9 @@ public class PartyAddressEntity {
      * RESIDENTIAL, COMMERCIAL, BILLING,
      * SHIPPING, CORRESPONDENCE, OTHER.
      */
+    @Enumerated(EnumType.STRING)
     @Column(name = "address_type", nullable = false, length = 20)
-    private String addressType;
+    private AddressType addressType;
 
     /**
      * Apelido opcional para identificar o endereço.
