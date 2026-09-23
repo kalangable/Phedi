@@ -2,12 +2,12 @@ package com.phedi.application.party.organization;
 
 import java.util.List;
 
+import com.phedi.domain.party.model.Identifier;
 import com.phedi.domain.party.model.Organization;
-import com.phedi.domain.party.model.PartyIdentifier;
 
 public interface OrganizationQueryService {
 
-    Organization findByIdentifier(PartyIdentifier partyIdentifier);
+    Organization findByIdentifier(Identifier identifier);
 
     List<Organization> findAll();
 

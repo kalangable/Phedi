@@ -1,11 +1,11 @@
 package com.phedi.application.party.organization;
 
-import com.phedi.domain.party.model.PartyIdentifier;
+import com.phedi.domain.party.model.Identifier;
 
 public interface OrganizationStatusChangeService {
 
-    void activate(PartyIdentifier partyIdentifier);
+    void activate(Identifier identifier);
 
-    void deactivate(PartyIdentifier partyIdentifier);
+    void deactivate(Identifier identifier);
 
 }

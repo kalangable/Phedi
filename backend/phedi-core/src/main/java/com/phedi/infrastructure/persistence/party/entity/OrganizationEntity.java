@@ -28,12 +28,6 @@ public class OrganizationEntity extends PartyEntity{
     @Column(name = "founding_date")
     private LocalDate foundingDate;
 
-    @Column(name = "primary_identification_type", length = 20)
-    private String identificationType;
-
-    @Column(name = "primary_identification_document", length = 50)
-    private String identificationNumber;
-
     // Constructors
     public OrganizationEntity() {
         super(PartyType.ORGANIZATION);

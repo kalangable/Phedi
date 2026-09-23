@@ -11,7 +11,7 @@ import com.phedi.infrastructure.persistence.party.entity.OrganizationEntity;
 public interface OrganizationPersistenceMapper extends PartyPersistenceMapper<Organization, OrganizationEntity> {
 
     @Override
-    @Mapping(target = "partyNumber", source = "partyIdentifier.value")
+    @Mapping(target = "publicId", source = "identifier.value")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "partyType", ignore = true)
     @Mapping(target = "isDeleted", ignore = true)
@@ -21,11 +21,11 @@ public interface OrganizationPersistenceMapper extends PartyPersistenceMapper<Or
     OrganizationEntity toEntity(Organization domain);
 
     @Override
-    @Mapping(target = "partyIdentifier", source = "partyNumber")
+    @Mapping(target = "identifier", source = "publicId")
     Organization toDomain(OrganizationEntity entity);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "partyNumber", ignore = true)
+    @Mapping(target = "publicId", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "isDeleted", ignore = true)

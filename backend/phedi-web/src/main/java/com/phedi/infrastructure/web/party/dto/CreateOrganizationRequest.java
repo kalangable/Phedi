@@ -25,12 +25,4 @@ public class CreateOrganizationRequest {
 
     private LocalDate foundingDate;
 
-    @NotBlank
-    @Size(max = 20)
-    private String identificationType;
-
-    @NotBlank
-    @Size(max = 50)
-    private String identificationNumber;
-
 }

@@ -19,8 +19,8 @@ public abstract class PartyEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "party_number", nullable = false, unique = true, length = 20)
-    private String partyNumber;
+    @Column(name = "public_id", nullable = false, unique = true, length = 36)
+    private String publicId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "party_type", nullable = false, length = 20)

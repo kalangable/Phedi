@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.phedi.domain.party.exception.DuplicateIdentificationException;
 import com.phedi.domain.party.exception.InvalidIdentificationException;
+import com.phedi.domain.party.model.Identifier;
 import com.phedi.domain.party.model.Organization;
-import com.phedi.domain.party.model.PartyIdentifier;
 import com.phedi.domain.party.repository.OrganizationRepository;
 import com.phedi.domain.party.validation.IdentificationValidationService;
 
@@ -28,17 +28,15 @@ public class OrganizationService implements OrganizationCreationService, Organiz
     @Override
     public Organization create(Organization organization) {
 
-        validateIdentification(organization.getIdentificationType(), organization.getIdentificationNumber());
-        checkDuplicateIdentification(organization.getIdentificationType(), organization.getIdentificationNumber());
-
         return organizationRepository.insert(organization);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Organization findByIdentifier(PartyIdentifier partyIdentifier) {
-        return organizationRepository.findByPartyIdentifier(partyIdentifier)
-                .orElseThrow(() -> new RuntimeException(String.format("Organization not found")));
+    public Organization findByIdentifier(Identifier identifier) {
+        return organizationRepository.findByIdentifier(identifier)
+                .orElseThrow(() -> new RuntimeException(
+                        String.format("Organization not found: %s", identifier)));
     }
 
     @Override
@@ -50,15 +48,13 @@ public class OrganizationService implements OrganizationCreationService, Organiz
     @Override
     @Transactional(readOnly = true)
     public Organization findByIdentification(String identificationType, String identificationNumber) {
-        return organizationRepository.findByIdentification(identificationType, identificationNumber)
-                .orElseThrow(() -> new RuntimeException(
-                        String.format("Organization %s with %s not found", identificationType, identificationNumber)));
+        return null;
     }
 
     @Override
     public Organization update(Organization updatedOrganization) {
 
-        Organization existingOrganization = findByIdentifier(updatedOrganization.getPartyIdentifier());
+        Organization existingOrganization = findByIdentifier(updatedOrganization.getIdentifier());
 
         // Validate new identification if changed
         checkUpdateRoles(updatedOrganization, existingOrganization);
@@ -69,32 +65,21 @@ public class OrganizationService implements OrganizationCreationService, Organiz
     protected void checkUpdateRoles(Organization updatedOrganization, Organization existingOrganization) {
 
         log.info("Compare Organizations [{}] [{}]", updatedOrganization, existingOrganization);
-        if (updatedOrganization.getIdentificationType() != null &&
-                updatedOrganization.getIdentificationNumber() != null) {
-
-            boolean identificationChanged = !updatedOrganization.getIdentificationType().equals(existingOrganization.getIdentificationType()) 
-                || !updatedOrganization.getIdentificationNumber().equals(existingOrganization.getIdentificationNumber());
-
-            if (identificationChanged) {
-                validateIdentification(updatedOrganization.getIdentificationType(), updatedOrganization.getIdentificationNumber());
-                checkDuplicateIdentification(updatedOrganization.getIdentificationType(), updatedOrganization.getIdentificationNumber());
-            }
-        }
     }
 
     @Override
-    public void delete(PartyIdentifier partyIdentifier) {
-        organizationRepository.deleteByPartyIdentifier(partyIdentifier);
+    public void delete(Identifier identifier) {
+        organizationRepository.deleteByIdentifier(identifier);
     }
 
     @Override
-    public void activate(PartyIdentifier partyIdentifier) {
-        organizationRepository.activate(partyIdentifier.value());
+    public void activate(Identifier identifier) {
+        organizationRepository.activate(identifier);
     }
 
     @Override
-    public void deactivate(PartyIdentifier partyIdentifier) {
-        organizationRepository.deactivate(partyIdentifier.value());
+    public void deactivate(Identifier identifier) {
+        organizationRepository.deactivate(identifier);
     }
 
     private void validateIdentification(String identificationType, String identificationNumber) {

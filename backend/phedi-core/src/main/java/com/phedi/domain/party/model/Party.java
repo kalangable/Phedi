@@ -5,11 +5,7 @@ import lombok.Data;
 @Data 
 public abstract class Party {
 
-    private PartyIdentifier partyIdentifier;
-
-    private String identificationType;
-
-    private String identificationNumber;
+    private Identifier identifier;
 
     private Boolean isActive;
 

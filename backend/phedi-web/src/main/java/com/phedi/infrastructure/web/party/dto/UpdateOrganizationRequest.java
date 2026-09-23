@@ -23,10 +23,4 @@ public class UpdateOrganizationRequest {
 
     private LocalDate foundingDate;
 
-    @Size(max = 20)
-    private String identificationType;
-
-    @Size(max = 50)
-    private String identificationNumber;
-
 }

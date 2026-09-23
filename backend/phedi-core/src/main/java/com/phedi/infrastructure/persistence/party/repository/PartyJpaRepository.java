@@ -9,18 +9,18 @@ import com.phedi.infrastructure.persistence.party.entity.PartyEntity;
 
 interface PartyJpaRepository extends JpaRepository<PartyEntity, Long> {
 
-    Boolean existsByPartyNumberAndIsDeletedFalse(String partyNumber);
+    Boolean existsByPublicIdAndIsDeletedFalse(String publicId);
 
     @Modifying
-    @Query("Update PartyEntity p set p.isActive = false, p.updatedAt = CURRENT_TIMESTAMP where p.partyNumber = :partyNumber and p.isActive = true and p.isDeleted = false")
-    int deactivate(@Param("partyNumber") String partyNumber);
+    @Query("Update PartyEntity p set p.isActive = false, p.updatedAt = CURRENT_TIMESTAMP where p.publicId = :publicId and p.isActive = true and p.isDeleted = false")
+    int deactivate(@Param("publicId") String publicId);
 
     @Modifying
-    @Query("Update PartyEntity p set p.isActive = true, p.updatedAt = CURRENT_TIMESTAMP where p.partyNumber = :partyNumber and p.isActive = false and p.isDeleted = false")
-    int activate(@Param("partyNumber") String partyNumber);
+    @Query("Update PartyEntity p set p.isActive = true, p.updatedAt = CURRENT_TIMESTAMP where p.publicId = :publicId and p.isActive = false and p.isDeleted = false")
+    int activate(@Param("publicId") String publicId);
 
     @Modifying
-    @Query("Update PartyEntity p set p.isDeleted = true , p.deletedAt = CURRENT_TIMESTAMP where p.partyNumber = :partyNumber and p.isDeleted = false")
-    int softDelete(@Param("partyNumber") String partyNumber);
+    @Query("Update PartyEntity p set p.isDeleted = true , p.deletedAt = CURRENT_TIMESTAMP where p.publicId = :publicId and p.isDeleted = false")
+    int softDelete(@Param("publicId") String publicId);
 
 }

@@ -9,7 +9,7 @@ import com.phedi.infrastructure.persistence.party.entity.PartyEntity;
 
 interface PartySpecializationJpaRepository<E extends PartyEntity> extends JpaRepository<E, Long> {
 
-    Optional<E> findByPartyNumberAndIsDeletedFalse(String partyNumber);
+    Optional<E> findByPublicIdAndIsDeletedFalse(String publicId);
 
     // Find all organizations excluding deleted
     List<E> findByIsDeletedFalse();

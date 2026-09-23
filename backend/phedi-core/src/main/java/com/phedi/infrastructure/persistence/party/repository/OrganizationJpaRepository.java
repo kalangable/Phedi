@@ -11,7 +11,4 @@ interface OrganizationJpaRepository extends PartySpecializationJpaRepository<Org
 
     // Find by trade name
     List<OrganizationEntity> findByTradeNameAndIsDeletedFalse(String tradeName);
-
-
-    Boolean existsByIdentificationTypeAndIdentificationNumber(String identificationType, String identificationNumber);
 }

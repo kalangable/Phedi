@@ -28,12 +28,6 @@ public class PersonEntity extends PartyEntity {
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    @Column(name = "primary_identification_type", length = 20)
-    private String identificationType;
-
-    @Column(name = "primary_identification_document", length = 50)
-    private String identificationNumber;
-
     // Constructors
     public PersonEntity() {
         super(PartyType.PERSON);

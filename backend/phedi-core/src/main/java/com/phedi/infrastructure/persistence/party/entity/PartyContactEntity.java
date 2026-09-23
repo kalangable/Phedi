@@ -1,6 +1,5 @@
 package com.phedi.infrastructure.persistence.party.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -16,10 +15,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "party_identity_document")
+@Table(name = "party_contact")
 @Data
 @NoArgsConstructor
-public class PartyIdentityDocumentEntity {
+public class PartyContactEntity {
 
     /**
      * Identificador técnico do registro na persistência.
@@ -31,7 +30,7 @@ public class PartyIdentityDocumentEntity {
     private Long id;
 
     /**
-     * Identificador público do documento.
+     * Identificador público do contato.
      *
      * Gerado por party_public_id_seq, a mesma sequence
      * usada por todas as tabelas do Party.
@@ -42,7 +41,7 @@ public class PartyIdentityDocumentEntity {
     private String publicId;
 
     /**
-     * Party ao qual este documento pertence.
+     * Party ao qual este contato pertence.
      *
      * A relação utiliza o ID técnico da tabela party.
      */
@@ -51,70 +50,55 @@ public class PartyIdentityDocumentEntity {
     private PartyEntity party;
 
     /**
-     * Tipo do documento.
+     * Canal de contato.
      *
      * Exemplos:
-     * CPF, CNPJ, RG, PASSPORT, VAT,
-     * STATE_TAX_REGISTRATION, etc.
+     * EMAIL, PHONE, MOBILE, LANDLINE,
+     * WHATSAPP, FAX, WEBSITE, OTHER.
      */
-    @Column(name = "document_type", nullable = false, length = 30)
-    private String documentType;
+    @Column(name = "contact_type", nullable = false, length = 30)
+    private String contactType;
 
     /**
-     * Número ou valor do documento.
+     * Finalidade/contexto do contato.
      *
-     * O valor deve ser armazenado de acordo com as regras
-     * definidas para o tipo de documento.
+     * Exemplos:
+     * PERSONAL, COMMERCIAL, BILLING, SUPPORT, OTHER.
+     *
+     * NULL significa que não há finalidade declarada.
      */
-    @Column(name = "document_number", nullable = false, length = 100)
-    private String documentNumber;
+    @Column(name = "purpose", length = 20)
+    private String purpose;
 
     /**
-     * Código ISO 3166-1 alpha-2 do país relacionado ao documento.
+     * Valor do contato.
      *
+     * Exemplos:
+     * contato@empresa.com, +55 11 99999-9999.
+     */
+    @Column(name = "contact_value", nullable = false, length = 255)
+    private String contactValue;
+
+    /**
+     * Código ISO 3166-1 alpha-2 do país do contato.
+     *
+     * Relevante para telefones com DDI.
      * Exemplos: BR, US, AR.
      */
     @Column(name = "country_code", length = 2)
     private String countryCode;
 
     /**
-     * Região, estado ou outra jurisdição relacionada à emissão.
-     *
-     * Pode ser relevante para documentos cuja identificação
-     * depende da jurisdição, como inscrições estaduais.
-     */
-    @Column(name = "issuer_region", length = 10)
-    private String issuerRegion;
-
-    /**
-     * Órgão ou autoridade responsável pela emissão do documento.
-     */
-    @Column(name = "issuing_authority", length = 100)
-    private String issuingAuthority;
-
-    /**
-     * Data de emissão do documento.
-     */
-    @Column(name = "issued_at")
-    private LocalDate issuedAt;
-
-    /**
-     * Data de expiração do documento, quando aplicável.
-     */
-    @Column(name = "expires_at")
-    private LocalDate expiresAt;
-
-    /**
-     * Indica se este é o documento principal do Party.
+     * Indica se este é o contato principal do Party.
      */
     @Column(name = "is_primary", nullable = false)
     private boolean primary;
 
     /**
-     * Indica se o documento está ativo.
+     * Indica se o contato está ativo.
      *
      * É diferente de deletedAt:
-     * um documento pode estar inativo sem ter sido
+     * um contato pode estar inativo sem ter sido
      * removido logicamente.
      */
     @Column(name = "is_active", nullable = false)

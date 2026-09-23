@@ -5,10 +5,10 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.phedi.domain.party.model.Identifier;
 import com.phedi.domain.party.model.Party;
-import com.phedi.domain.party.model.PartyIdentifier;
 import com.phedi.domain.party.repository.PartyRepository;
-import com.phedi.domain.party.service.PartyIdentifierGenerator;
+import com.phedi.domain.party.service.PublicIdGenerator;
 import com.phedi.infrastructure.persistence.party.entity.PartyEntity;
 import com.phedi.infrastructure.persistence.party.mapper.PartyPersistenceMapper;
 
@@ -20,13 +20,13 @@ public abstract class PartyRepositoryImpl<D extends Party, E extends PartyEntity
 
     private final PartyJpaRepository partyJpaRepository;
     private final PartySpecializationJpaRepository<E> specializationJpaRepositoryJpaRepository;
-    private final PartyIdentifierGenerator partyIdentifierGenerator;
+    private final PublicIdGenerator publicIdGenerator;
     protected final PartyPersistenceMapper<D, E> mapper;
 
     @Override
     public D insert(D domain) {
-        if (domain.getPartyIdentifier() == null) {
-            domain.setPartyIdentifier(partyIdentifierGenerator.generate());
+        if (domain.getIdentifier() == null) {
+            domain.setIdentifier(publicIdGenerator.generate());
         }
 
         E entity = mapper.toEntity(domain);
@@ -34,38 +34,38 @@ public abstract class PartyRepositoryImpl<D extends Party, E extends PartyEntity
         E savedEntity = specializationJpaRepositoryJpaRepository.save(entity);
 
         return mapper.toDomain(savedEntity);
-    };
+    }
 
     @Override
     public D update(D domain) {
-        if (domain.getPartyIdentifier() == null || domain.getPartyIdentifier().value().isBlank()) {
-            throw new IllegalArgumentException("PartyIdentifier is required for update");
+        if (domain.getIdentifier() == null || domain.getIdentifier().value().isBlank()) {
+            throw new IllegalArgumentException("Identifier is required for update");
         }
 
         E existing = specializationJpaRepositoryJpaRepository
-                .findByPartyNumberAndIsDeletedFalse(domain.getPartyIdentifier().value())
+                .findByPublicIdAndIsDeletedFalse(domain.getIdentifier().value())
                 .orElseThrow(() -> new RuntimeException(
                         String.format("%s not found: %s", domain.getClass().getSimpleName(),
-                                domain.getPartyIdentifier().value())));
+                                domain.getIdentifier().value())));
 
         mapper.updateEntity(domain, existing);
 
         return mapper.toDomain(specializationJpaRepositoryJpaRepository.save(existing));
-    };
-
-    @Override
-    public void deleteByPartyIdentifier(PartyIdentifier partyIdentifier) {
-        partyJpaRepository.softDelete(partyIdentifier.value());
     }
 
     @Override
-    public void activate(String partyNumber) {
-        partyJpaRepository.activate(partyNumber);
+    public void deleteByIdentifier(Identifier identifier) {
+        partyJpaRepository.softDelete(identifier.value());
     }
 
     @Override
-    public void deactivate(String partyNumber) {
-        partyJpaRepository.deactivate(partyNumber);
+    public void activate(Identifier identifier) {
+        partyJpaRepository.activate(identifier.value());
+    }
+
+    @Override
+    public void deactivate(Identifier identifier) {
+        partyJpaRepository.deactivate(identifier.value());
     }
 
     @Override
@@ -76,8 +76,8 @@ public abstract class PartyRepositoryImpl<D extends Party, E extends PartyEntity
     }
 
     @Override
-    public Optional<D> findByPartyIdentifier(PartyIdentifier partyIdentifier) {
-        return specializationJpaRepositoryJpaRepository.findByPartyNumberAndIsDeletedFalse(partyIdentifier.value()).map(mapper::toDomain);
+    public Optional<D> findByIdentifier(Identifier identifier) {
+        return specializationJpaRepositoryJpaRepository.findByPublicIdAndIsDeletedFalse(identifier.value()).map(mapper::toDomain);
     }
 
 }

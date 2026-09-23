@@ -3,8 +3,8 @@ package com.phedi.domain.party.repository;
 import java.util.List;
 import java.util.Optional;
 
+import com.phedi.domain.party.model.Identifier;
 import com.phedi.domain.party.model.Party;
-import com.phedi.domain.party.model.PartyIdentifier;
 
 public interface PartyRepository<DOMAIN extends Party> {
 
@@ -12,14 +12,14 @@ public interface PartyRepository<DOMAIN extends Party> {
 
     DOMAIN update(DOMAIN domain);
 
-    void deleteByPartyIdentifier(PartyIdentifier partyIdentifier);
+    void deleteByIdentifier(Identifier identifier);
 
-    Optional<DOMAIN> findByPartyIdentifier(PartyIdentifier partyIdentifier);
+    Optional<DOMAIN> findByIdentifier(Identifier identifier);
 
     List<DOMAIN> findAll();
 
-    void activate(String partyNumber);
+    void activate(Identifier identifier);
 
-    void deactivate(String partyNumber);
+    void deactivate(Identifier identifier);
 
 }

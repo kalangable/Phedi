@@ -1,7 +1,6 @@
 package com.phedi.domain.party.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.phedi.domain.party.model.Organization;
 public interface OrganizationRepository extends PartyRepository<Organization>{
@@ -14,5 +13,4 @@ public interface OrganizationRepository extends PartyRepository<Organization>{
 
     Boolean existsByIdentificationTypeAndIdentificationNumber(String identificationType, String identificationNumber);
 
-    Optional<Organization> findByIdentification(String identificationType, String identificationNumber);
 }

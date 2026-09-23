@@ -9,11 +9,7 @@ import lombok.Data;
 @Builder
 public class OrganizationResponse {
 
-    private String partyIdentifier;
-
-    private String identificationType;
-
-    private String identificationNumber;
+    private String identifier;
 
     private String legalName;
 

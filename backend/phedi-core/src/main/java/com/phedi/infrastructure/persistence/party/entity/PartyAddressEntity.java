@@ -1,6 +1,5 @@
 package com.phedi.infrastructure.persistence.party.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -16,10 +15,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "party_identity_document")
+@Table(name = "party_address")
 @Data
 @NoArgsConstructor
-public class PartyIdentityDocumentEntity {
+public class PartyAddressEntity {
 
     /**
      * Identificador técnico do registro na persistência.
@@ -31,7 +30,7 @@ public class PartyIdentityDocumentEntity {
     private Long id;
 
     /**
-     * Identificador público do documento.
+     * Identificador público do endereço.
      *
      * Gerado por party_public_id_seq, a mesma sequence
      * usada por todas as tabelas do Party.
@@ -42,7 +41,7 @@ public class PartyIdentityDocumentEntity {
     private String publicId;
 
     /**
-     * Party ao qual este documento pertence.
+     * Party ao qual este endereço pertence.
      *
      * A relação utiliza o ID técnico da tabela party.
      */
@@ -51,70 +50,90 @@ public class PartyIdentityDocumentEntity {
     private PartyEntity party;
 
     /**
-     * Tipo do documento.
+     * Tipo de endereço.
      *
      * Exemplos:
-     * CPF, CNPJ, RG, PASSPORT, VAT,
-     * STATE_TAX_REGISTRATION, etc.
+     * RESIDENTIAL, COMMERCIAL, BILLING,
+     * SHIPPING, CORRESPONDENCE, OTHER.
      */
-    @Column(name = "document_type", nullable = false, length = 30)
-    private String documentType;
+    @Column(name = "address_type", nullable = false, length = 20)
+    private String addressType;
 
     /**
-     * Número ou valor do documento.
+     * Apelido opcional para identificar o endereço.
      *
-     * O valor deve ser armazenado de acordo com as regras
-     * definidas para o tipo de documento.
+     * Exemplos: Casa, Escritório matriz, CAIXA postal.
      */
-    @Column(name = "document_number", nullable = false, length = 100)
-    private String documentNumber;
+    @Column(name = "label", length = 50)
+    private String label;
 
     /**
-     * Código ISO 3166-1 alpha-2 do país relacionado ao documento.
+     * Logradouro (rua, avenida, travessa, ...).
+     */
+    @Column(name = "street", nullable = false, length = 255)
+    private String street;
+
+    /**
+     * Número.
+     *
+     * NULL para endereços cuja jurisdição não usa numeração.
+     */
+    @Column(name = "number", length = 20)
+    private String number;
+
+    /**
+     * Complemento (apartamento, sala, bloco, ...).
+     */
+    @Column(name = "complement", length = 100)
+    private String complement;
+
+    /**
+     * Bairro/district.
+     */
+    @Column(name = "district", length = 100)
+    private String district;
+
+    /**
+     * Cidade.
+     */
+    @Column(name = "city", nullable = false, length = 100)
+    private String city;
+
+    /**
+     * Estado, província ou região.
+     *
+     * Exemplos: SP, CA, Ontario.
+     */
+    @Column(name = "state_region", length = 100)
+    private String stateRegion;
+
+    /**
+     * Código postal (CEP, ZIP, ...).
+     *
+     * NULL para países sem código postal.
+     */
+    @Column(name = "postal_code", length = 20)
+    private String postalCode;
+
+    /**
+     * Código ISO 3166-1 alpha-2 do país.
      *
      * Exemplos: BR, US, AR.
      */
-    @Column(name = "country_code", length = 2)
+    @Column(name = "country_code", nullable = false, length = 2)
     private String countryCode;
 
     /**
-     * Região, estado ou outra jurisdição relacionada à emissão.
-     *
-     * Pode ser relevante para documentos cuja identificação
-     * depende da jurisdição, como inscrições estaduais.
-     */
-    @Column(name = "issuer_region", length = 10)
-    private String issuerRegion;
-
-    /**
-     * Órgão ou autoridade responsável pela emissão do documento.
-     */
-    @Column(name = "issuing_authority", length = 100)
-    private String issuingAuthority;
-
-    /**
-     * Data de emissão do documento.
-     */
-    @Column(name = "issued_at")
-    private LocalDate issuedAt;
-
-    /**
-     * Data de expiração do documento, quando aplicável.
-     */
-    @Column(name = "expires_at")
-    private LocalDate expiresAt;
-
-    /**
-     * Indica se este é o documento principal do Party.
+     * Indica se este é o endereço principal do Party.
      */
     @Column(name = "is_primary", nullable = false)
     private boolean primary;
 
     /**
-     * Indica se o documento está ativo.
+     * Indica se o endereço está ativo.
      *
      * É diferente de deletedAt:
-     * um documento pode estar inativo sem ter sido
+     * um endereço pode estar inativo sem ter sido
      * removido logicamente.
      */
     @Column(name = "is_active", nullable = false)
