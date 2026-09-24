@@ -31,7 +31,7 @@ public class OrganizationRepositoryImpl extends PartyRepositoryImpl<Organization
                 .stream().map(mapper::toDomain)
                 .toList();
     }
-    
+
     @Override
     public List<Organization> findByLegalName(String legalName) {
         return jpaRepository.findByLegalNameAndIsDeletedFalse(legalName)

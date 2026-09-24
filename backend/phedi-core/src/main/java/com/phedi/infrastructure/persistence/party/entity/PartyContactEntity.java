@@ -16,6 +16,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import com.phedi.domain.party.model.ContactPurpose;
 import com.phedi.domain.party.model.ContactType;
 
 @Entity
@@ -72,8 +73,9 @@ public class PartyContactEntity {
      *
      * NULL significa que não há finalidade declarada.
      */
+    @Enumerated(EnumType.STRING)
     @Column(name = "purpose", length = 20)
-    private String purpose;
+    private ContactPurpose purpose;
 
     /**
      * Valor do contato.

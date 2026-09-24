@@ -1,8 +1,11 @@
 package com.phedi.infrastructure.web.party.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor 
+@NoArgsConstructor
 public class CreateOrganizationRequest {
 
     @NotBlank
@@ -24,5 +27,15 @@ public class CreateOrganizationRequest {
     private String brandName;
 
     private LocalDate foundingDate;
+
+    @Valid
+    private List<ContactRequest> contacts;
+
+    @Valid
+    private List<AddressRequest> addresses;
+
+    @Valid
+    @NotEmpty
+    private List<DocumentRequest> documents;
 
 }

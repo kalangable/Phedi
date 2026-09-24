@@ -20,6 +20,7 @@ import com.phedi.infrastructure.web.party.dto.OrganizationResponse;
 import com.phedi.infrastructure.web.party.dto.UpdateOrganizationRequest;
 import com.phedi.infrastructure.web.party.mapper.OrganizationDomainMapper;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -45,7 +46,7 @@ public class OrganizationController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> add(@RequestBody CreateOrganizationRequest organizationRequest) {
+    public ResponseEntity<Void> add(@Valid @RequestBody CreateOrganizationRequest organizationRequest) {
         var domain = mapper.toDomain(organizationRequest);
         var organizationCreated = organizationService.create(domain);
         var location = locationBuilder.build(organizationCreated.getIdentifier());
@@ -53,7 +54,7 @@ public class OrganizationController {
     }
 
     @PatchMapping("/{identifier}")
-    public ResponseEntity<Void> update(@PathVariable Identifier identifier, @RequestBody UpdateOrganizationRequest updatedOrganization){
+    public ResponseEntity<Void> update(@PathVariable Identifier identifier, @Valid @RequestBody UpdateOrganizationRequest updatedOrganization){
         var domain = mapper.toDomain(identifier.value(), updatedOrganization);
         organizationService.update(domain);
         return ResponseEntity.noContent().build();

@@ -1,5 +1,8 @@
 package com.phedi.infrastructure.web.party.mapper;
 
+import java.time.LocalDate;
+import java.util.Optional;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -17,6 +20,9 @@ public interface OrganizationDomainMapper {
     Organization toDomain(CreateOrganizationRequest dto);
 
     @Mapping(target = "identifier", source = "identifier")
+    @Mapping(target = "contacts", ignore = true)
+    @Mapping(target = "addresses", ignore = true)
+    @Mapping(target = "documents", ignore = true)
     Organization toDomain(String identifier, UpdateOrganizationRequest dto);
 
     @Mapping(target = "identifier", source = "identifier.value")
@@ -27,5 +33,21 @@ public interface OrganizationDomainMapper {
             return null;
         }
         return new Identifier(identifier);
+    }
+
+    default String mapIdentifierToString(Identifier identifier) {
+        return identifier == null ? null : identifier.value();
+    }
+
+    /**
+     * Interino: unwrap dos campos opcionais do Update enquanto o mapper do
+     * agregado (com regras de seção/primary/identidade) não é construído.
+     */
+    default String unwrapString(Optional<String> value) {
+        return value.orElse(null);
+    }
+
+    default LocalDate unwrapLocalDate(Optional<LocalDate> value) {
+        return value.orElse(null);
     }
 }
