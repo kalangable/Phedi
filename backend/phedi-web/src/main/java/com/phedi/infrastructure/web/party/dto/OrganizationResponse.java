@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.phedi.infrastructure.web.party.dto.item.AddressResponse;
+import com.phedi.infrastructure.web.party.dto.item.ContactResponse;
+import com.phedi.infrastructure.web.party.dto.item.DocumentResponse;
 
 import lombok.Builder;
 import lombok.Data;

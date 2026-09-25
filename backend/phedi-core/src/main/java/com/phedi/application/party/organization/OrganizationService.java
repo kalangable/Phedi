@@ -5,17 +5,14 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phedi.domain.party.exception.DuplicateIdentificationException;
-import com.phedi.domain.party.exception.InvalidIdentificationException;
 import com.phedi.domain.party.model.Identifier;
 import com.phedi.domain.party.model.Organization;
 import com.phedi.domain.party.repository.OrganizationRepository;
-import com.phedi.domain.party.validation.IdentificationValidationService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -23,11 +20,9 @@ public class OrganizationService implements OrganizationCreationService, Organiz
         OrganizationDeletionService, OrganizationQueryService, OrganizationStatusChangeService {
 
     private final OrganizationRepository organizationRepository;
-    private final IdentificationValidationService validationService;
 
     @Override
     public Organization create(Organization organization) {
-
         return organizationRepository.insert(organization);
     }
 
@@ -43,12 +38,6 @@ public class OrganizationService implements OrganizationCreationService, Organiz
     @Transactional(readOnly = true)
     public List<Organization> findAll() {
         return organizationRepository.findAll();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Organization findByIdentification(String identificationType, String identificationNumber) {
-        return null;
     }
 
     @Override
@@ -82,16 +71,4 @@ public class OrganizationService implements OrganizationCreationService, Organiz
         organizationRepository.deactivate(identifier);
     }
 
-    private void validateIdentification(String identificationType, String identificationNumber) {
-        if (!validationService.validate(identificationType, identificationNumber)) {
-            throw new InvalidIdentificationException(identificationType, identificationNumber);
-        }
-    }
-
-    private void checkDuplicateIdentification(String identificationType, String identificationNumber) {
-        if (organizationRepository.existsByIdentificationTypeAndIdentificationNumber(identificationType,
-                identificationNumber)) {
-            throw new DuplicateIdentificationException(identificationType, identificationNumber);
-        }
-    }
 }

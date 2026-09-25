@@ -1,6 +1,6 @@
-package com.phedi.infrastructure.web.party.dto;
+package com.phedi.infrastructure.web.party.dto.item;
 
-import com.phedi.domain.party.model.AddressType;
+import com.phedi.domain.party.model.item.AddressType;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

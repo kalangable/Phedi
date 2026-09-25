@@ -1,7 +1,7 @@
-package com.phedi.infrastructure.web.party.dto;
+package com.phedi.infrastructure.web.party.dto.item;
 
-import com.phedi.domain.party.model.ContactPurpose;
-import com.phedi.domain.party.model.ContactType;
+import com.phedi.domain.party.model.item.ContactPurpose;
+import com.phedi.domain.party.model.item.ContactType;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

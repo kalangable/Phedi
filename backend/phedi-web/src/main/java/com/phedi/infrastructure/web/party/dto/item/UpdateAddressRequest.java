@@ -1,8 +1,8 @@
-package com.phedi.infrastructure.web.party.dto;
+package com.phedi.infrastructure.web.party.dto.item;
 
 import java.util.Optional;
 
-import com.phedi.domain.party.model.AddressType;
+import com.phedi.domain.party.model.item.AddressType;
 
 import jakarta.validation.constraints.Size;
 import lombok.Data;

@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
 
     <changeSet id="001-01" author="akrasovski">
-        <comment>FASE 1: Criar tabela party (entidade base do Party Model)</comment>
+        <comment>FASE 1: Criar tabela party (entidade base do Party Model, com auditoria completa)</comment>
 
         <createTable tableName="party">
             <column name="id" type="BIGINT" autoIncrement="true">
@@ -22,6 +22,16 @@
             </column>
             <column name="is_deleted" type="BOOLEAN" defaultValueBoolean="false">
                 <constraints nullable="false" />
+            </column>
+            <!-- Auditoria: usuários responsáveis pelas operações -->
+            <column name="created_by" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="updated_by" type="VARCHAR(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="deleted_by" type="VARCHAR(100)">
+                <constraints nullable="true" />
             </column>
             <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false" />
@@ -43,7 +53,7 @@
     </changeSet>
 
     <changeSet id="001-02" author="akrasovski">
-        <comment>FASE 1: Criar tabela person (pessoa física)</comment>
+        <comment>FASE 1: Criar tabela person (pessoa física, filha JOINED de party)</comment>
 
         <createTable tableName="person">
             <column name="id" type="BIGINT">
@@ -77,7 +87,7 @@
     </changeSet>
 
     <changeSet id="001-03" author="akrasovski">
-        <comment>FASE 1: Criar tabela organization (pessoa jurídica)</comment>
+        <comment>FASE 1: Criar tabela organization (pessoa jurídica, filha JOINED de party)</comment>
 
         <createTable tableName="organization">
             <column name="id" type="BIGINT">
@@ -85,13 +95,13 @@
                     foreignKeyName="fk_organization_party"
                     references="party(id)" />
             </column>
-            <column name="legal_name" type="VARCHAR(255)">
+            <column name="legal_name" type="VARCHAR(200)">
                 <constraints nullable="false" />
             </column>
-            <column name="trade_name" type="VARCHAR(255)">
+            <column name="trade_name" type="VARCHAR(200)">
                 <constraints nullable="true" />
             </column>
-            <column name="brand_name" type="VARCHAR(255)">
+            <column name="brand_name" type="VARCHAR(200)">
                 <constraints nullable="true" />
             </column>
             <column name="founding_date" type="DATE">
@@ -106,7 +116,8 @@
             FASE 1: Criar sequence para public_id.
             Sequence compartilhada: gera os identificadores
             públicos de party e de todas as suas tabelas filhas
-            (party_contact, party_address, ...).
+            (party_item -> party_identity_document, party_contact,
+            party_address).
         </comment>
 
         <createSequence
@@ -118,45 +129,142 @@
             cycle="false" />
     </changeSet>
 
-
     <changeSet id="001-05" author="akrasovski">
 
         <comment>
-            FASE 1: Criar tabela de documentos de identificação do Party.
-            Um Party pode possuir múltiplos documentos, como CPF, CNPJ,
-            RG, Passaporte, Inscrição Estadual, VAT, etc.
+            FASE 1: Criar tabela base party_item (herança JOINED dos itens
+            do Party). Documentos, contatos e endereços compartilham os
+            campos de identidade, party_id, is_primary, ativação, auditoria
+            e soft-delete nesta tabela; cada filha mantém apenas as suas
+            colunas específicas.
         </comment>
 
-        <createTable tableName="party_identity_document">
+        <createTable tableName="party_item">
 
-            <!-- Identificador técnico da persistência -->
+            <!-- Identificador técnico da persistência (uma sequence única party_item_id_seq) -->
             <column name="id"
                 type="BIGINT"
                 autoIncrement="true">
                 <constraints
                     primaryKey="true"
-                    primaryKeyName="party_identity_document_pkey"
                     nullable="false" />
             </column>
 
             <!--
-                Identificador público do documento.
+                Identificador público do item.
                 Gerado por party_public_id_seq, a mesma sequence
-                usada por todas as tabelas do Party.
+                usada por todo o agregado Party.
             -->
             <column name="public_id"
                 type="VARCHAR(36)">
                 <constraints nullable="false" unique="true" />
             </column>
 
-            <!-- Party ao qual o documento pertence -->
+            <!-- Party ao qual o item pertence -->
             <column name="party_id"
                 type="BIGINT">
                 <constraints
                     nullable="false"
-                    foreignKeyName="fk_party_identity_document_party"
+                    foreignKeyName="fk_party_item_party"
                     referencedTableName="party"
                     referencedColumnNames="id" />
+            </column>
+
+            <!-- Indica se este item é o principal (primary) da sua seção -->
+            <column name="is_primary"
+                type="BOOLEAN"
+                defaultValueBoolean="false">
+                <constraints nullable="false" />
+            </column>
+
+            <!--
+                Indica se o item está atualmente ativo.
+                Diferente de deleted_at: um item pode estar inativo
+                sem ter sido removido logicamente.
+            -->
+            <column name="is_active"
+                type="BOOLEAN"
+                defaultValueBoolean="true">
+                <constraints nullable="false" />
+            </column>
+
+            <!-- Soft-delete -->
+            <column name="is_deleted"
+                type="BOOLEAN"
+                defaultValueBoolean="false">
+                <constraints nullable="false" />
+            </column>
+
+            <!-- Auditoria: usuários responsáveis pelas operações -->
+            <column name="created_by"
+                type="VARCHAR(100)" />
+            <column name="updated_by"
+                type="VARCHAR(100)" />
+            <column name="deleted_by"
+                type="VARCHAR(100)" />
+
+            <column name="created_at"
+                type="TIMESTAMP"
+                defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="updated_at"
+                type="TIMESTAMP"
+                defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="deleted_at"
+                type="TIMESTAMP">
+                <constraints nullable="true" />
+            </column>
+
+        </createTable>
+
+        <!-- Localiza rapidamente todos os itens de um Party -->
+        <createIndex
+            indexName="idx_party_item_party"
+            tableName="party_item">
+
+            <column name="party_id" />
+
+        </createIndex>
+
+        <!-- Permite consultas de itens ativos -->
+        <createIndex
+            indexName="idx_party_item_active"
+            tableName="party_item">
+
+            <column name="is_active" />
+
+        </createIndex>
+
+    </changeSet>
+
+    <changeSet id="001-06" author="akrasovski">
+
+        <comment>
+            FASE 1: Criar tabela de documentos de identificação do Party
+            (filha JOINED de party_item). Um Party pode possuir múltiplos
+            documentos, como CPF, CNPJ, RG, Passaporte, Inscrição Estadual,
+            VAT, etc. As colunas comuns vivem em party_item.
+        </comment>
+
+        <createTable tableName="party_identity_document">
+
+            <!--
+                Identificador técnico: PK e FK para party_item.
+                A geração do id acontece na tabela base (party_item).
+            -->
+            <column name="id"
+                type="BIGINT">
+                <constraints
+                    primaryKey="true"
+                    primaryKeyName="party_identity_document_pkey"
+                    nullable="false"
+                    foreignKeyName="fk_party_identity_document_item"
+                    references="party_item(id)" />
             </column>
 
             <!--
@@ -202,58 +310,7 @@
             <column name="expires_at"
                 type="DATE" />
 
-            <!-- Indica se este é o documento principal do Party -->
-            <column name="is_primary"
-                type="BOOLEAN"
-                defaultValueBoolean="false">
-                <constraints nullable="false" />
-            </column>
-
-            <!--
-                Indica se o documento está atualmente ativo.
-                Diferente de deleted_at: um documento pode ser inativo
-                sem necessariamente ter sido removido do histórico.
-            -->
-            <column name="is_active"
-                type="BOOLEAN"
-                defaultValueBoolean="true">
-                <constraints nullable="false" />
-            </column>
-
-            <!-- Data de criação do registro -->
-            <column name="created_at"
-                type="TIMESTAMP"
-                defaultValueDate="now()">
-                <constraints nullable="false" />
-            </column>
-
-            <!-- Data da última atualização -->
-            <column name="updated_at"
-                type="TIMESTAMP"
-                defaultValueDate="now()">
-                <constraints nullable="false" />
-            </column>
-
-            <!--
-                Data da exclusão lógica.
-                NULL indica que o registro não foi excluído logicamente.
-            -->
-            <column name="deleted_at"
-                type="TIMESTAMP" />
-
         </createTable>
-
-        <!--
-            Permite localizar rapidamente todos os documentos
-            pertencentes a um Party.
-        -->
-        <createIndex
-            indexName="idx_party_identity_document_party"
-            tableName="party_identity_document">
-
-            <column name="party_id" />
-
-        </createIndex>
 
         <!--
             Índice para consultas por documento.
@@ -282,58 +339,34 @@
 
         </createIndex>
 
-        <!--
-            Permite consultas de documentos ativos.
-        -->
-        <createIndex
-            indexName="idx_party_identity_document_active"
-            tableName="party_identity_document">
-
-            <column name="is_active" />
-
-        </createIndex>
-
     </changeSet>
 
-
-    <changeSet id="001-06" author="akrasovski">
+    <changeSet id="001-07" author="akrasovski">
 
         <comment>
-            FASE 1: Criar tabela de contatos do Party.
-            Um Party pode possuir múltiplas formas de contato,
-            como e-mail, telefone, celular, WhatsApp, etc.
+            FASE 1: Criar tabela de contatos do Party (filha JOINED de
+            party_item). Um Party pode possuir múltiplas formas de contato,
+            como e-mail, telefone, celular, WhatsApp, etc. As colunas
+            comuns vivem em party_item.
+            Observação: a unicidade (party, tipo, valor) foi movida para
+            validação na aplicação, pois party_id passou a viver na base
+            party_item.
         </comment>
 
         <createTable tableName="party_contact">
 
-            <!-- Identificador técnico da persistência -->
+            <!--
+                Identificador técnico: PK e FK para party_item.
+                A geração do id acontece na tabela base (party_item).
+            -->
             <column name="id"
-                type="BIGINT"
-                autoIncrement="true">
+                type="BIGINT">
                 <constraints
                     primaryKey="true"
                     primaryKeyName="party_contact_pkey"
-                    nullable="false" />
-            </column>
-
-            <!--
-                Identificador público do contato.
-                Gerado por party_public_id_seq, a mesma sequence
-                usada por todas as tabelas do Party.
-            -->
-            <column name="public_id"
-                type="VARCHAR(36)">
-                <constraints nullable="false" unique="true" />
-            </column>
-
-            <!-- Party ao qual o contato pertence -->
-            <column name="party_id"
-                type="BIGINT">
-                <constraints
                     nullable="false"
-                    foreignKeyName="fk_party_contact_party"
-                    referencedTableName="party"
-                    referencedColumnNames="id" />
+                    foreignKeyName="fk_party_contact_item"
+                    references="party_item(id)" />
             </column>
 
             <!--
@@ -376,58 +409,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <!-- Indica se este é o contato principal do Party -->
-            <column name="is_primary"
-                type="BOOLEAN"
-                defaultValueBoolean="false">
-                <constraints nullable="false" />
-            </column>
-
-            <!--
-                Indica se o contato está atualmente ativo.
-                Diferente de deleted_at: um contato pode estar
-                inativo sem ter sido removido logicamente.
-            -->
-            <column name="is_active"
-                type="BOOLEAN"
-                defaultValueBoolean="true">
-                <constraints nullable="false" />
-            </column>
-
-            <!-- Data de criação do registro -->
-            <column name="created_at"
-                type="TIMESTAMP"
-                defaultValueDate="now()">
-                <constraints nullable="false" />
-            </column>
-
-            <!-- Data da última atualização -->
-            <column name="updated_at"
-                type="TIMESTAMP"
-                defaultValueDate="now()">
-                <constraints nullable="false" />
-            </column>
-
-            <!--
-                Data da exclusão lógica.
-                NULL indica que o registro não foi excluído logicamente.
-            -->
-            <column name="deleted_at"
-                type="TIMESTAMP" />
-
         </createTable>
-
-        <!--
-            Permite localizar rapidamente todos os contatos
-            pertencentes a um Party.
-        -->
-        <createIndex
-            indexName="idx_party_contact_party"
-            tableName="party_contact">
-
-            <column name="party_id" />
-
-        </createIndex>
 
         <!--
             Permite filtrar contatos pelo canal.
@@ -455,12 +437,6 @@
 
         </createIndex>
 
-        <!-- Impede contatos duplicados para o mesmo Party -->
-        <addUniqueConstraint
-            constraintName="uq_party_contact_value"
-            tableName="party_contact"
-            columnNames="party_id, contact_type, contact_value" />
-
         <sql> ALTER TABLE party_contact ADD CONSTRAINT chk_party_contact_type
             CHECK (contact_type IN ('EMAIL',
             'PHONE', 'MOBILE', 'LANDLINE', 'WHATSAPP', 'FAX', 'WEBSITE', 'OTHER')) </sql>
@@ -471,45 +447,29 @@
 
     </changeSet>
 
-
-    <changeSet id="001-07" author="akrasovski">
+    <changeSet id="001-08" author="akrasovski">
 
         <comment>
-            FASE 1: Criar tabela de endereços do Party.
-            Um Party pode possuir múltiplos endereços,
-            como residencial, comercial, cobrança, entrega, etc.
+            FASE 1: Criar tabela de endereços do Party (filha JOINED de
+            party_item). Um Party pode possuir múltiplos endereços, como
+            residencial, comercial, cobrança, entrega, etc. As colunas
+            comuns vivem em party_item.
         </comment>
 
         <createTable tableName="party_address">
 
-            <!-- Identificador técnico da persistência -->
+            <!--
+                Identificador técnico: PK e FK para party_item.
+                A geração do id acontece na tabela base (party_item).
+            -->
             <column name="id"
-                type="BIGINT"
-                autoIncrement="true">
+                type="BIGINT">
                 <constraints
                     primaryKey="true"
                     primaryKeyName="party_address_pkey"
-                    nullable="false" />
-            </column>
-
-            <!--
-                Identificador público do endereço.
-                Gerado por party_public_id_seq, a mesma sequence
-                usada por todas as tabelas do Party.
-            -->
-            <column name="public_id"
-                type="VARCHAR(36)">
-                <constraints nullable="false" unique="true" />
-            </column>
-
-            <!-- Party ao qual o endereço pertence -->
-            <column name="party_id"
-                type="BIGINT">
-                <constraints
                     nullable="false"
-                    foreignKeyName="fk_party_address_party"
-                    referencedTableName="party"
-                    referencedColumnNames="id" />
+                    foreignKeyName="fk_party_address_item"
+                    references="party_item(id)" />
             </column>
 
             <!--
@@ -523,7 +483,7 @@
             </column>
 
             <!--
-                Apelido/opcional para identificar o endereço.
+                Apelido opcional para identificar o endereço.
                 Exemplos: Casa, Escritório matriz, CAIXA postal.
             -->
             <column name="label"
@@ -591,58 +551,7 @@
                 <constraints nullable="false" />
             </column>
 
-            <!-- Indica se este é o endereço principal do Party -->
-            <column name="is_primary"
-                type="BOOLEAN"
-                defaultValueBoolean="false">
-                <constraints nullable="false" />
-            </column>
-
-            <!--
-                Indica se o endereço está atualmente ativo.
-                Diferente de deleted_at: um endereço pode estar
-                inativo sem ter sido removido logicamente.
-            -->
-            <column name="is_active"
-                type="BOOLEAN"
-                defaultValueBoolean="true">
-                <constraints nullable="false" />
-            </column>
-
-            <!-- Data de criação do registro -->
-            <column name="created_at"
-                type="TIMESTAMP"
-                defaultValueDate="now()">
-                <constraints nullable="false" />
-            </column>
-
-            <!-- Data da última atualização -->
-            <column name="updated_at"
-                type="TIMESTAMP"
-                defaultValueDate="now()">
-                <constraints nullable="false" />
-            </column>
-
-            <!--
-                Data da exclusão lógica.
-                NULL indica que o registro não foi excluído logicamente.
-            -->
-            <column name="deleted_at"
-                type="TIMESTAMP" />
-
         </createTable>
-
-        <!--
-            Permite localizar rapidamente todos os endereços
-            pertencentes a um Party.
-        -->
-        <createIndex
-            indexName="idx_party_address_party"
-            tableName="party_address">
-
-            <column name="party_id" />
-
-        </createIndex>
 
         <!--
             Permite filtrar endereços pelo tipo.
@@ -670,6 +579,5 @@
             'COMMERCIAL', 'BILLING', 'SHIPPING', 'CORRESPONDENCE', 'OTHER')) </sql>
 
     </changeSet>
-
 
 </databaseChangeLog>

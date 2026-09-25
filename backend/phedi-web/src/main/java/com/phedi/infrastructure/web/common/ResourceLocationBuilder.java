@@ -17,4 +17,19 @@ public class ResourceLocationBuilder {
                 .collect(Collectors.joining("/"));
         return URI.create(currentPath + (suffix.isBlank() ? "" : "/" + suffix));
     }
+
+    /**
+     * Monta a Location de um recurso "plano" (identificado por public_id global),
+     * a partir do context-path — ex.: /api/v1/documents/{public_id}.
+     */
+    public URI buildFlat(String resourcePath, Object... pathVariables) {
+        String suffix = Arrays.stream(pathVariables)
+                .map(Object::toString)
+                .collect(Collectors.joining("/"));
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(resourcePath)
+                .path(suffix.isBlank() ? "" : "/" + suffix)
+                .build()
+                .toUri();
+    }
 }

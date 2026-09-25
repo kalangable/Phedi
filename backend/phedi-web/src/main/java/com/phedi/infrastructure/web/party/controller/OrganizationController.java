@@ -35,7 +35,6 @@ public class OrganizationController {
     @GetMapping
     public ResponseEntity<List<OrganizationResponse>> get() {
         var result = organizationService.findAll().stream().map(mapper::toDto).toList();
-
         return ResponseEntity.ok(result);
     }
 

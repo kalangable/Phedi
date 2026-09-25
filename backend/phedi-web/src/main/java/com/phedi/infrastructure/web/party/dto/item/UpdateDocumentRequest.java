@@ -1,9 +1,9 @@
-package com.phedi.infrastructure.web.party.dto;
+package com.phedi.infrastructure.web.party.dto.item;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-import com.phedi.domain.party.model.DocumentType;
+import com.phedi.domain.party.model.item.DocumentType;
 
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Size;

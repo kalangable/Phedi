@@ -1,4 +1,4 @@
-package com.phedi.infrastructure.web.party.dto;
+package com.phedi.infrastructure.web.party.dto.item;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

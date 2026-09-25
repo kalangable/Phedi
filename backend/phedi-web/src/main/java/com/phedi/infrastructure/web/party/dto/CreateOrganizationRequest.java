@@ -3,6 +3,10 @@ package com.phedi.infrastructure.web.party.dto;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.phedi.infrastructure.web.party.dto.item.AddressRequest;
+import com.phedi.infrastructure.web.party.dto.item.ContactRequest;
+import com.phedi.infrastructure.web.party.dto.item.DocumentRequest;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

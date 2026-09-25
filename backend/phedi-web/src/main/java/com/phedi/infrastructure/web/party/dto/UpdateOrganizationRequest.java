@@ -4,6 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import com.phedi.infrastructure.web.party.dto.item.UpdateAddressRequest;
+import com.phedi.infrastructure.web.party.dto.item.UpdateContactRequest;
+import com.phedi.infrastructure.web.party.dto.item.UpdateDocumentRequest;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import lombok.Data;

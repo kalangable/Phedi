@@ -1,8 +1,8 @@
-package com.phedi.infrastructure.web.party.dto;
+package com.phedi.infrastructure.web.party.dto.item;
 
 import java.time.LocalDate;
 
-import com.phedi.domain.party.model.DocumentType;
+import com.phedi.domain.party.model.item.DocumentType;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
