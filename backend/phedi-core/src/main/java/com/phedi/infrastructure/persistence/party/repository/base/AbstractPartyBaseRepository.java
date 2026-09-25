@@ -11,6 +11,9 @@ import com.phedi.domain.party.service.PublicIdGenerator;
 import com.phedi.infrastructure.persistence.party.entity.base.AbstractEntity;
 import com.phedi.infrastructure.persistence.party.mapper.PersistenceMapper;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public abstract class AbstractPartyBaseRepository<DOMAIN extends PartyBase, ENTITY extends AbstractEntity> implements PartyBaseRepository<DOMAIN> {
 
     protected final PartyBaseJpaRepository<ENTITY> jpaRepository;
@@ -18,13 +21,6 @@ public abstract class AbstractPartyBaseRepository<DOMAIN extends PartyBase, ENTI
 
     @Autowired
     protected PublicIdGenerator publicIdGenerator;
-
-    protected AbstractPartyBaseRepository(
-            PartyBaseJpaRepository<ENTITY> jpaRepository,
-            PersistenceMapper<DOMAIN, ENTITY> mapper) {
-        this.jpaRepository = jpaRepository;
-        this.mapper = mapper;
-    }
 
     @Override
     public Optional<DOMAIN> findByIdentifier(Identifier identifier) {

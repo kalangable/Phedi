@@ -1,12 +1,13 @@
 package com.phedi.domain.party.validation;
 
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class IdentificationValidationService {
 
     private final List<IdentificationValidator> validators;
