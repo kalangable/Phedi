@@ -2,6 +2,9 @@ package com.phedi.domain.party.model;
 
 import java.util.Set;
 
+import com.phedi.domain.party.model.item.AddressType;
+import com.phedi.domain.party.model.item.DocumentType;
+
 /**
  * Tipo da Party: pessoa física ou organização.
  *

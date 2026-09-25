@@ -1,76 +1,43 @@
 package com.phedi.infrastructure.persistence.party.entity;
 
-import jakarta.persistence.*;
-import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
-
 import com.phedi.domain.party.model.PartyType;
+import com.phedi.infrastructure.persistence.party.entity.base.AbstractEntity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+/**
+ * Raiz do Party Model: representa uma parte (pessoa física ou jurídica)
+ * no agregado. A identidade, ativação e auditoria vêm de
+ * {@link AbstractEntity}; aqui ficam apenas as colunas da tabela
+ * base {@code party} e a estratégia de herança JOINED.
+ */
 @Entity
 @Table(name = "party")
 @Inheritance(strategy = InheritanceType.JOINED)
-@EntityListeners(AuditingEntityListener.class)
 @Data
-public abstract class PartyEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "public_id", nullable = false, unique = true, length = 36)
-    private String publicId;
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public abstract class PartyEntity extends AbstractEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "party_type", nullable = false, length = 20)
     private PartyType partyType;
 
-    @Column(name = "is_active", nullable = false)
-    private Boolean isActive = true;
-
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted = false;
-
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    // Constructors
     protected PartyEntity() {
     }
 
     protected PartyEntity(PartyType partyType) {
         this.partyType = partyType;
-        this.isActive = true;
-        this.isDeleted = false;
-    }
-
-    // Business methods
-    public void softDelete() {
-        this.isDeleted = true;
-        this.deletedAt = LocalDateTime.now();
-    }
-
-    public void restore() {
-        this.isDeleted = false;
-        this.deletedAt = null;
-    }
-
-    public void activate() {
-        this.isActive = true;
-    }
-
-    public void deactivate() {
-        this.isActive = false;
+        setIsActive(true);
+        setIsDeleted(false);
     }
 }

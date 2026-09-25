@@ -3,6 +3,10 @@ package com.phedi.domain.party.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.phedi.domain.party.model.item.PartyAddress;
+import com.phedi.domain.party.model.item.PartyContact;
+import com.phedi.domain.party.model.item.PartyIdentityDocument;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

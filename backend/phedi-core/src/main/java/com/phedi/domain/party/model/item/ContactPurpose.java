@@ -1,4 +1,4 @@
-package com.phedi.domain.party.model;
+package com.phedi.domain.party.model.item;
 
 /**
  * Finalidade/contexto de um contato do Party.

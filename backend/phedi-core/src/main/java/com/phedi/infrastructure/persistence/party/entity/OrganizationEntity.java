@@ -8,13 +8,15 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import com.phedi.domain.party.model.PartyType;
 
 @Entity 
 @Table (name = "organization")
 @PrimaryKeyJoinColumn (name = "id")
-@EqualsAndHashCode (callSuper = false)
+@EqualsAndHashCode (callSuper = true)
+@ToString (callSuper = true)
 @Data 
 public class OrganizationEntity extends PartyEntity{
 

@@ -1,4 +1,6 @@
-package com.phedi.domain.party.model;
+package com.phedi.domain.party.model.item;
+
+import com.phedi.domain.party.model.PartyBase;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

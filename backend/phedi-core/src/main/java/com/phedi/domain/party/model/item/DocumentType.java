@@ -1,4 +1,4 @@
-package com.phedi.domain.party.model;
+package com.phedi.domain.party.model.item;
 
 /**
  * Tipo de documento de identificação do Party.
