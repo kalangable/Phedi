@@ -3,7 +3,7 @@ package com.phedi.infrastructure.web.party.dto.item;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import com.phedi.domain.party.model.item.DocumentType;
+import com.phedi.domain.party.model.item.IdentityDocumentType;
 
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Size;
@@ -12,12 +12,12 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UpdateDocumentRequest extends PartyItemUpdateRequest {
+public class UpdateIdentityDocumentRequest extends PartyItemUpdateRequest {
 
-    private Optional<DocumentType> documentType = Optional.empty();
+    private Optional<IdentityDocumentType> identityDocumentType = Optional.empty();
 
     @Size(max = 100)
-    private Optional<String> documentNumber = Optional.empty();
+    private Optional<String> identityDocumentNumber = Optional.empty();
 
     @Size(min = 2, max = 2)
     private Optional<String> countryCode = Optional.empty();

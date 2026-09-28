@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import com.phedi.infrastructure.web.party.dto.item.UpdateAddressRequest;
 import com.phedi.infrastructure.web.party.dto.item.UpdateContactRequest;
-import com.phedi.infrastructure.web.party.dto.item.UpdateDocumentRequest;
+import com.phedi.infrastructure.web.party.dto.item.UpdateIdentityDocumentRequest;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
@@ -41,6 +41,6 @@ public class UpdateOrganizationRequest {
     private List<UpdateAddressRequest> addresses;
 
     @Valid
-    private List<UpdateDocumentRequest> documents;
+    private List<UpdateIdentityDocumentRequest> documents;
 
 }

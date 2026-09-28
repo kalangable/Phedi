@@ -9,9 +9,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class PartyIdentityDocument extends PartyItem {
 
-    private DocumentType documentType;
+    private IdentityDocumentType identityDocumentType;
 
-    private String documentNumber;
+    private String identityDocumentNumber;
 
     private String countryCode;
 

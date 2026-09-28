@@ -8,13 +8,11 @@ import org.mapstruct.Mapping;
 
 import com.phedi.domain.party.model.Identifier;
 import com.phedi.domain.party.model.Organization;
-import com.phedi.domain.party.model.item.PartyIdentityDocument;
 import com.phedi.infrastructure.web.party.dto.CreateOrganizationRequest;
-import com.phedi.infrastructure.web.party.dto.item.DocumentRequest;
 import com.phedi.infrastructure.web.party.dto.OrganizationResponse;
 import com.phedi.infrastructure.web.party.dto.UpdateOrganizationRequest;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = IdentityDocumentMapper.class)
 public interface OrganizationDomainMapper {
 
     @Mapping(target = "identifier", ignore = true)
@@ -29,10 +27,6 @@ public interface OrganizationDomainMapper {
 
     @Mapping(target = "identifier", source = "identifier.value")
     OrganizationResponse toDto(Organization domain);
-
-    @Mapping(target = "identifier", ignore = true)
-    @Mapping(target = "isActive", ignore = true)
-    PartyIdentityDocument toDomain(DocumentRequest request);
 
     default Identifier mapStringToIdentifier(String identifier) {
         if (identifier == null || identifier.isBlank()) {

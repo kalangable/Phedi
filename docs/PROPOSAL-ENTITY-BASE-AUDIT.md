@@ -196,7 +196,7 @@ Passam a **estender `PartyItemEntity`** com `@PrimaryKeyJoinColumn(name = "id")`
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class PartyIdentityDocumentEntity extends PartyItemEntity {
-    // documentType, documentNumber, countryCode, issuerRegion,
+    // identityDocumentType, identityDocumentNumber, countryCode, issuerRegion,
     // issuingAuthority, issuedAt, expiresAt
 }
 ```
@@ -246,8 +246,8 @@ Passa de "tabela completa" para "tabela filha":
 | Coluna | Tipo | Regras |
 |--------|------|--------|
 | `id` | BIGINT | PK + FK → `party_item(id)` |
-| `document_type` | VARCHAR(30) | NOT NULL |
-| `document_number` | VARCHAR(100) | NOT NULL |
+| `identity_document_type` | VARCHAR(30) | NOT NULL |
+| `identity_document_number` | VARCHAR(100) | NOT NULL |
 | `country_code` | VARCHAR(2) | NULL |
 | `issuer_region` | VARCHAR(10) | NULL |
 | `issuing_authority` | VARCHAR(100) | NULL |
@@ -449,7 +449,7 @@ Alterações necessárias:
 1. **`INSERT INTO party`**: adicionar colunas `created_by = 'seed'`, `updated_by = 'seed'` (mantendo `is_active`, `is_deleted=false`; `deleted_by`/`deleted_at` NULL).
 2. **Itens**: dividir cada INSERT em **dois**:
    - `INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)` → valores comuns.
-   - `INSERT INTO party_identity_document (id, document_type, document_number, ...)` ou `party_contact` / `party_address` → apenas colunas específicas (mesmo `id`).
+   - `INSERT INTO party_identity_document (id, identity_document_type, identity_document_number, ...)` ou `party_contact` / `party_address` → apenas colunas específicas (mesmo `id`).
 3. **Sequences**:
    - `party_public_id_seq`: o `GREATEST(...)` deve incluir também `party_item`.
    - Novo `SELECT setval('party_item_id_seq', (SELECT MAX(id) FROM party_item));` (a PK agora é gerada na base `party_item`).
@@ -458,13 +458,13 @@ Alterações necessárias:
 
 ```sql
 -- antes: 2 colunas comuns + específicas na mesma tabela
-INSERT INTO party_item (id, public_id, party_id, document_type, document_number, country_code,
+INSERT INTO party_item (id, public_id, party_id, identity_document_type, identity_document_number, country_code,
                         is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
 VALUES (1, '1000053', 1, NULL, NULL, NULL, true, true, false, 'seed', NOW(), 'seed', NOW());
 --       ↑ as colunas específicas NÃO existem em party_item →
 
 -- → vão para a tabela filha:
-INSERT INTO party_identity_document (id, document_type, document_number, country_code)
+INSERT INTO party_identity_document (id, identity_document_type, identity_document_number, country_code)
 VALUES (1, 'SSN', '123-45-6789', 'US');
 ```
 

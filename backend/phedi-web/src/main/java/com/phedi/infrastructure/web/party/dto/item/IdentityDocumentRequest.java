@@ -2,7 +2,7 @@ package com.phedi.infrastructure.web.party.dto.item;
 
 import java.time.LocalDate;
 
-import com.phedi.domain.party.model.item.DocumentType;
+import com.phedi.domain.party.model.item.IdentityDocumentType;
 
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
@@ -17,14 +17,14 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class DocumentRequest extends PartyItemRequest {
+public class IdentityDocumentRequest extends PartyItemRequest {
 
     @NotNull
-    private DocumentType documentType;
+    private IdentityDocumentType identityDocumentType;
 
     @NotBlank
     @Size(max = 100)
-    private String documentNumber;
+    private String identityDocumentNumber;
 
     @Size(min = 2, max = 2)
     private String countryCode;

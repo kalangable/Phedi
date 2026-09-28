@@ -3,7 +3,7 @@ package com.phedi.domain.party.model;
 import java.util.Set;
 
 import com.phedi.domain.party.model.item.AddressType;
-import com.phedi.domain.party.model.item.DocumentType;
+import com.phedi.domain.party.model.item.IdentityDocumentType;
 
 /**
  * Tipo da Party: pessoa física ou organização.
@@ -21,12 +21,12 @@ public enum PartyType {
      * Pessoa física (PF): documentos individuais (CPF, RG, passaporte, SSN).
      * Organização (PJ): registros de pessoa jurídica (CNPJ, EIN, ...).
      */
-    public Set<DocumentType> allowedDocumentTypes() {
+    public Set<IdentityDocumentType> allowedIdentityDocumentTypes() {
         return this == PERSON
-                ? Set.of(DocumentType.CPF, DocumentType.RG, DocumentType.PASSPORT,
-                        DocumentType.SSN, DocumentType.OTHER)
-                : Set.of(DocumentType.CNPJ, DocumentType.EIN,
-                        DocumentType.STATE_TAX_REGISTRATION, DocumentType.VAT, DocumentType.OTHER);
+                ? Set.of(IdentityDocumentType.CPF, IdentityDocumentType.RG, IdentityDocumentType.PASSPORT,
+                        IdentityDocumentType.SSN, IdentityDocumentType.OTHER)
+                : Set.of(IdentityDocumentType.CNPJ, IdentityDocumentType.EIN,
+                        IdentityDocumentType.STATE_TAX_REGISTRATION, IdentityDocumentType.VAT, IdentityDocumentType.OTHER);
     }
 
     /**
@@ -43,8 +43,8 @@ public enum PartyType {
                         AddressType.SHIPPING, AddressType.CORRESPONDENCE, AddressType.OTHER);
     }
 
-    public boolean supports(DocumentType documentType) {
-        return allowedDocumentTypes().contains(documentType);
+    public boolean supports(IdentityDocumentType identityDocumentType) {
+        return allowedIdentityDocumentTypes().contains(identityDocumentType);
     }
 
     public boolean supports(AddressType addressType) {

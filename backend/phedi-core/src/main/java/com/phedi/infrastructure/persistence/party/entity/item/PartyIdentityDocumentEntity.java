@@ -2,7 +2,7 @@ package com.phedi.infrastructure.persistence.party.entity.item;
 
 import java.time.LocalDate;
 
-import com.phedi.domain.party.model.item.DocumentType;
+import com.phedi.domain.party.model.item.IdentityDocumentType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,11 +31,11 @@ import lombok.ToString;
 public class PartyIdentityDocumentEntity extends PartyItemEntity {
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "document_type", nullable = false, length = 30)
-    private DocumentType documentType;
+    @Column(name = "identity_document_type", nullable = false, length = 30)
+    private IdentityDocumentType identityDocumentType;
 
-    @Column(name = "document_number", nullable = false, length = 100)
-    private String documentNumber;
+    @Column(name = "identity_document_number", nullable = false, length = 100)
+    private String identityDocumentNumber;
 
     @Column(name = "country_code", length = 2)
     private String countryCode;

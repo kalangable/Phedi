@@ -268,17 +268,17 @@
             </column>
 
             <!--
-                Tipo do documento.
+                Tipo do documento de identificação.
                 Exemplos: CPF, CNPJ, RG, PASSPORT,
                 STATE_TAX_REGISTRATION, VAT, etc.
             -->
-            <column name="document_type"
+            <column name="identity_document_type"
                 type="VARCHAR(30)">
                 <constraints nullable="false" />
             </column>
 
-            <!-- Número/valor do documento -->
-            <column name="document_number"
+            <!-- Número/valor do documento de identificação -->
+            <column name="identity_document_number"
                 type="VARCHAR(100)">
                 <constraints nullable="false" />
             </column>
@@ -313,7 +313,7 @@
         </createTable>
 
         <!--
-            Índice para consultas por documento.
+            Índice para consultas por documento de identificação.
             O country_code participa da busca para suportar
             documentos internacionais.
         -->
@@ -322,8 +322,8 @@
             tableName="party_identity_document">
 
             <column name="country_code" />
-            <column name="document_type" />
-            <column name="document_number" />
+            <column name="identity_document_type" />
+            <column name="identity_document_number" />
 
         </createIndex>
 
@@ -335,7 +335,7 @@
             indexName="idx_party_identity_document_type"
             tableName="party_identity_document">
 
-            <column name="document_type" />
+            <column name="identity_document_type" />
 
         </createIndex>
 

@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.phedi.infrastructure.web.party.dto.item.AddressRequest;
 import com.phedi.infrastructure.web.party.dto.item.ContactRequest;
-import com.phedi.infrastructure.web.party.dto.item.DocumentRequest;
+import com.phedi.infrastructure.web.party.dto.item.IdentityDocumentRequest;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -40,6 +40,6 @@ public class CreateOrganizationRequest {
 
     @Valid
     @NotEmpty
-    private List<DocumentRequest> documents;
+    private List<IdentityDocumentRequest> documents;
 
 }

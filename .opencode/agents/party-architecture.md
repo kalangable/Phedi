@@ -89,7 +89,7 @@ AbstractPartyBaseRepository<DOMAIN, ENTITY>          (base comum, CRUD)
 - Itens concretos: `PartyIdentityDocumentEntity`, `PartyContactEntity`, `PartyAddressEntity`.
 
 ### 6. Web (`infrastructure/web/party`)
-Controllers (`OrganizationController`, `DocumentsController`, `ContactController`), DTOs (`CreateOrganizationRequest`, `PartyItemRequest`, etc.). O `OrganizationService` (aplicação) delega aos contratos de domínio; os DTOs usam `@Data` + `@AllArgsConstructor`/`@NoArgsConstructor`.
+Controllers (`OrganizationController`, `IdentityDocumentsController`, `ContactController`), DTOs (`CreateOrganizationRequest`, `PartyItemRequest`, etc.). O `OrganizationService` (aplicação) delega aos contratos de domínio; os DTOs usam `@Data` + `@AllArgsConstructor`/`@NoArgsConstructor`.
 
 ## Fluxo de dados (exemplo: criar organização com documento)
 

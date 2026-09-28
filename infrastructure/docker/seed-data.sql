@@ -48,7 +48,7 @@ VALUES (1, 'John', 'Michael', 'Smith', 'John Michael Smith', '1985-03-15', 'MALE
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
 VALUES (1, '1000053', 1, true, true, false, 'seed', NOW(), 'seed', NOW());
 
-INSERT INTO party_identity_document (id, document_type, document_number, country_code)
+INSERT INTO party_identity_document (id, identity_document_type, identity_document_number, country_code)
 VALUES (1, 'SSN', '123-45-6789', 'US');
 
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
@@ -77,7 +77,7 @@ VALUES (2, 'Maria', 'Aparecida', 'Silva', 'Maria Aparecida Silva', '1990-07-22',
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
 VALUES (2, '1000054', 2, true, true, false, 'seed', NOW(), 'seed', NOW());
 
-INSERT INTO party_identity_document (id, document_type, document_number, country_code)
+INSERT INTO party_identity_document (id, identity_document_type, identity_document_number, country_code)
 VALUES (2, 'CPF', '123.456.789-01', 'BR');
 
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
@@ -106,7 +106,7 @@ VALUES (3, 'Carlos', 'Eduardo', 'Santos', 'Carlos Eduardo Santos', '1988-11-30',
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
 VALUES (3, '1000055', 3, true, true, false, 'seed', NOW(), 'seed', NOW());
 
-INSERT INTO party_identity_document (id, document_type, document_number, country_code)
+INSERT INTO party_identity_document (id, identity_document_type, identity_document_number, country_code)
 VALUES (3, 'CPF', '987.654.321-09', 'BR');
 
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
@@ -135,7 +135,7 @@ VALUES (4, 'Sarah', 'Anne', 'Johnson', 'Sarah Anne Johnson', '1992-05-18', 'FEMA
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
 VALUES (4, '1000056', 4, true, true, false, 'seed', NOW(), 'seed', NOW());
 
-INSERT INTO party_identity_document (id, document_type, document_number, country_code)
+INSERT INTO party_identity_document (id, identity_document_type, identity_document_number, country_code)
 VALUES (4, 'SSN', '987-65-4321', 'US');
 
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
@@ -164,7 +164,7 @@ VALUES (5, 'Ana', 'Paula', 'Oliveira', 'Ana Paula Oliveira', '1995-09-08', 'FEMA
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
 VALUES (5, '1000057', 5, true, true, false, 'seed', NOW(), 'seed', NOW());
 
-INSERT INTO party_identity_document (id, document_type, document_number, country_code)
+INSERT INTO party_identity_document (id, identity_document_type, identity_document_number, country_code)
 VALUES (5, 'CPF', '456.789.123-45', 'BR');
 
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
@@ -193,7 +193,7 @@ VALUES (6, 'Robert', 'James', 'Williams', 'Robert James Williams', '1983-12-25',
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
 VALUES (6, '1000058', 6, true, true, false, 'seed', NOW(), 'seed', NOW());
 
-INSERT INTO party_identity_document (id, document_type, document_number, country_code)
+INSERT INTO party_identity_document (id, identity_document_type, identity_document_number, country_code)
 VALUES (6, 'SSN', '555-12-3456', 'US');
 
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
@@ -233,7 +233,7 @@ VALUES (7, 'Tech Solutions Brasil Ltda', 'Tech Solutions', 'TechSol', '2015-06-1
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
 VALUES (7, '1000059', 7, true, true, false, 'seed', NOW(), 'seed', NOW());
 
-INSERT INTO party_identity_document (id, document_type, document_number, country_code)
+INSERT INTO party_identity_document (id, identity_document_type, identity_document_number, country_code)
 VALUES (7, 'CNPJ', '12.345.678/0001-90', 'BR');
 
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
@@ -262,7 +262,7 @@ VALUES (8, 'Innovation Corporation Inc', 'Innovation Corp', 'InnovCorp', '2010-0
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
 VALUES (8, '1000060', 8, true, true, false, 'seed', NOW(), 'seed', NOW());
 
-INSERT INTO party_identity_document (id, document_type, document_number, country_code)
+INSERT INTO party_identity_document (id, identity_document_type, identity_document_number, country_code)
 VALUES (8, 'EIN', '12-3456789', 'US');
 
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
@@ -291,7 +291,7 @@ VALUES (9, 'Comércio Digital Ltda', 'Comércio Digital', 'DigiShop', '2018-01-1
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
 VALUES (9, '1000061', 9, true, true, false, 'seed', NOW(), 'seed', NOW());
 
-INSERT INTO party_identity_document (id, document_type, document_number, country_code)
+INSERT INTO party_identity_document (id, identity_document_type, identity_document_number, country_code)
 VALUES (9, 'CNPJ', '98.765.432/0001-10', 'BR');
 
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
@@ -320,7 +320,7 @@ VALUES (10, 'Global Services International Inc', 'Global Services', 'GlobalServ'
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
 VALUES (10, '1000062', 10, true, true, false, 'seed', NOW(), 'seed', NOW());
 
-INSERT INTO party_identity_document (id, document_type, document_number, country_code)
+INSERT INTO party_identity_document (id, identity_document_type, identity_document_number, country_code)
 VALUES (10, 'EIN', '98-7654321', 'US');
 
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
@@ -349,7 +349,7 @@ VALUES (11, 'Logística Express Brasil Ltda', 'Logística Express', 'LogExpress'
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
 VALUES (11, '1000063', 11, true, true, false, 'seed', NOW(), 'seed', NOW());
 
-INSERT INTO party_identity_document (id, document_type, document_number, country_code)
+INSERT INTO party_identity_document (id, identity_document_type, identity_document_number, country_code)
 VALUES (11, 'CNPJ', '45.678.901/0001-23', 'BR');
 
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
@@ -378,7 +378,7 @@ VALUES (12, 'Alimentos Naturais do Brasil Ltda', 'Alimentos Naturais', 'NaturalF
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
 VALUES (12, '1000064', 12, true, true, false, 'seed', NOW(), 'seed', NOW());
 
-INSERT INTO party_identity_document (id, document_type, document_number, country_code)
+INSERT INTO party_identity_document (id, identity_document_type, identity_document_number, country_code)
 VALUES (12, 'CNPJ', '78.901.234/0001-56', 'BR');
 
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
@@ -407,7 +407,7 @@ VALUES (13, 'Consultoria Empresarial Brasil Ltda', 'CE Brasil', 'CEBrasil', '201
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
 VALUES (13, '1000065', 13, true, true, false, 'seed', NOW(), 'seed', NOW());
 
-INSERT INTO party_identity_document (id, document_type, document_number, country_code)
+INSERT INTO party_identity_document (id, identity_document_type, identity_document_number, country_code)
 VALUES (13, 'CNPJ', '34.567.890/0001-78', 'BR');
 
 INSERT INTO party_item (id, public_id, party_id, is_primary, is_active, is_deleted, created_by, created_at, updated_by, updated_at)
@@ -470,7 +470,7 @@ SELECT setval('party_item_id_seq', (SELECT MAX(id) FROM party_item));
 --
 -- -- Documentos por party
 -- SELECT p.public_id AS party_public_id, d.public_id AS document_public_id,
---        d.document_type, d.document_number, d.country_code
+--        d.identity_document_type, d.identity_document_number, d.country_code
 -- FROM party_identity_document d
 -- JOIN party_item pi ON pi.id = d.id
 -- JOIN party p ON p.id = pi.party_id

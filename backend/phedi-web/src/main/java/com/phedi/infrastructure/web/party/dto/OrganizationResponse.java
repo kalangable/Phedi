@@ -6,7 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.phedi.infrastructure.web.party.dto.item.AddressResponse;
 import com.phedi.infrastructure.web.party.dto.item.ContactResponse;
-import com.phedi.infrastructure.web.party.dto.item.DocumentResponse;
+import com.phedi.infrastructure.web.party.dto.item.IdentityDocumentResponse;
 
 import lombok.Builder;
 import lombok.Data;
@@ -32,6 +32,6 @@ public class OrganizationResponse {
 
     private List<AddressResponse> addresses;
 
-    private List<DocumentResponse> documents;
+    private List<IdentityDocumentResponse> documents;
 
 }

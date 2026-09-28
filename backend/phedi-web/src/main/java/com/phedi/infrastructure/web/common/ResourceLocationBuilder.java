@@ -20,7 +20,8 @@ public class ResourceLocationBuilder {
 
     /**
      * Monta a Location de um recurso "plano" (identificado por public_id global),
-     * a partir do context-path — ex.: /api/v1/documents/{public_id}.
+     * a partir do context-path — ex.: /api/v1/documents/{public_id}
+     * (documento de identificação).
      */
     public URI buildFlat(String resourcePath, Object... pathVariables) {
         String suffix = Arrays.stream(pathVariables)

@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @RestController 
 @RequestMapping("/documents")
 @RequiredArgsConstructor 
-public class DocumentsController {
+public class IdentityDocumentsController {
 
     
 }

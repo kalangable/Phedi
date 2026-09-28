@@ -6,7 +6,7 @@ package com.phedi.domain.party.model.item;
  * Exemplos: CPF, CNPJ (BR); SSN, EIN (US); RG, PASSPORT;
  * VAT, STATE_TAX_REGISTRATION, etc.
  */
-public enum DocumentType {
+public enum IdentityDocumentType {
     CPF,
     CNPJ,
     RG,

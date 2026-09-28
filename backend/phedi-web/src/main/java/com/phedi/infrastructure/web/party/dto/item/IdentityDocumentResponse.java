@@ -2,7 +2,7 @@ package com.phedi.infrastructure.web.party.dto.item;
 
 import java.time.LocalDate;
 
-import com.phedi.domain.party.model.item.DocumentType;
+import com.phedi.domain.party.model.item.IdentityDocumentType;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,11 +11,11 @@ import lombok.experimental.SuperBuilder;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-public class DocumentResponse extends PartyItemResponse {
+public class IdentityDocumentResponse extends PartyItemResponse {
 
-    private DocumentType documentType;
+    private IdentityDocumentType identityDocumentType;
 
-    private String documentNumber;
+    private String identityDocumentNumber;
 
     private String countryCode;
 
