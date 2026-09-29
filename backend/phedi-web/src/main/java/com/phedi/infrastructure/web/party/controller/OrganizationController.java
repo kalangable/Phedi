@@ -18,7 +18,7 @@ import com.phedi.infrastructure.web.common.ResourceLocationBuilder;
 import com.phedi.infrastructure.web.party.dto.CreateOrganizationRequest;
 import com.phedi.infrastructure.web.party.dto.OrganizationResponse;
 import com.phedi.infrastructure.web.party.dto.UpdateOrganizationRequest;
-import com.phedi.infrastructure.web.party.mapper.OrganizationDomainMapper;
+import com.phedi.infrastructure.web.party.mapper.OrganizationMapper;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class OrganizationController {
 
     private final OrganizationService organizationService;
-    private final OrganizationDomainMapper mapper;
+    private final OrganizationMapper mapper;
     private final ResourceLocationBuilder locationBuilder;
 
     @GetMapping
