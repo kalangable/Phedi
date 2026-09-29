@@ -8,7 +8,6 @@ import com.phedi.application.party.Findable;
 import com.phedi.application.party.Updatable;
 import com.phedi.domain.party.exception.InvalidIdentificationException;
 import com.phedi.domain.party.model.Identifier;
-import com.phedi.domain.party.model.Organization;
 import com.phedi.domain.party.model.item.IdentityDocumentType;
 import com.phedi.domain.party.model.item.PartyIdentityDocument;
 import com.phedi.domain.party.repository.item.PartyIdentityDocumentRepository;
@@ -22,7 +21,6 @@ public class PartyIdentityDocumentService implements PartyItemCreatable<PartyIde
 
     private final PartyIdentityDocumentRepository partyIdentityDocumentRepository;
     private final IdentificationValidationService validationService;
-
 
     @Override
     public PartyIdentityDocument createItem(Identifier partyIdentifier, PartyIdentityDocument identityDocument) {
