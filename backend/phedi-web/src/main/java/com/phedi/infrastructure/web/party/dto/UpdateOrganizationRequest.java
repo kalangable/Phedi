@@ -10,6 +10,7 @@ import com.phedi.infrastructure.web.party.dto.item.UpdateIdentityDocumentRequest
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.valueextraction.ExtractedValue;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,14 +24,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateOrganizationRequest {
 
-    @Size(max = 200)
-    private Optional<String> legalName = Optional.empty();
+    private Optional<@ExtractedValue @Size(max = 200) String> legalName = Optional.empty();
 
-    @Size(max = 200)
-    private Optional<String> tradeName = Optional.empty();
+    private Optional<@ExtractedValue @Size(max = 200) String> tradeName = Optional.empty();
 
-    @Size(max = 200)
-    private Optional<String> brandName = Optional.empty();
+    private Optional<@ExtractedValue @Size(max = 200) String> brandName = Optional.empty();
 
     private Optional<LocalDate> foundingDate = Optional.empty();
 

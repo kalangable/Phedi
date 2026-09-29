@@ -7,6 +7,7 @@ import com.phedi.domain.party.model.item.IdentityDocumentType;
 
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.valueextraction.ExtractedValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -16,17 +17,13 @@ public class UpdateIdentityDocumentRequest extends PartyItemUpdateRequest {
 
     private Optional<IdentityDocumentType> identityDocumentType = Optional.empty();
 
-    @Size(max = 100)
-    private Optional<String> identityDocumentNumber = Optional.empty();
+    private Optional<@ExtractedValue @Size(max = 100) String> identityDocumentNumber = Optional.empty();
 
-    @Size(min = 2, max = 2)
-    private Optional<String> countryCode = Optional.empty();
+    private Optional<@ExtractedValue @Size(min = 2, max = 2) String> countryCode = Optional.empty();
 
-    @Size(max = 10)
-    private Optional<String> issuerRegion = Optional.empty();
+    private Optional<@ExtractedValue @Size(max = 10) String> issuerRegion = Optional.empty();
 
-    @Size(max = 100)
-    private Optional<String> issuingAuthority = Optional.empty();
+    private Optional<@ExtractedValue @Size(max = 100) String> issuingAuthority = Optional.empty();
 
     private Optional<LocalDate> issuedAt = Optional.empty();
 

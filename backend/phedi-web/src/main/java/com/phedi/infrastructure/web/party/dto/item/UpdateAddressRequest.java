@@ -5,6 +5,7 @@ import java.util.Optional;
 import com.phedi.domain.party.model.item.AddressType;
 
 import jakarta.validation.constraints.Size;
+import jakarta.validation.valueextraction.ExtractedValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,31 +15,22 @@ public class UpdateAddressRequest extends PartyItemUpdateRequest {
 
     private Optional<AddressType> addressType = Optional.empty();
 
-    @Size(max = 50)
-    private Optional<String> label = Optional.empty();
+    private Optional<@ExtractedValue @Size(max = 50) String> label = Optional.empty();
 
-    @Size(max = 255)
-    private Optional<String> street = Optional.empty();
+    private Optional<@ExtractedValue @Size(max = 255) String> street = Optional.empty();
 
-    @Size(max = 20)
-    private Optional<String> number = Optional.empty();
+    private Optional<@ExtractedValue @Size(max = 20) String> number = Optional.empty();
 
-    @Size(max = 100)
-    private Optional<String> complement = Optional.empty();
+    private Optional<@ExtractedValue @Size(max = 100) String> complement = Optional.empty();
 
-    @Size(max = 100)
-    private Optional<String> district = Optional.empty();
+    private Optional<@ExtractedValue @Size(max = 100) String> district = Optional.empty();
 
-    @Size(max = 100)
-    private Optional<String> city = Optional.empty();
+    private Optional<@ExtractedValue @Size(max = 100) String> city = Optional.empty();
 
-    @Size(max = 100)
-    private Optional<String> stateRegion = Optional.empty();
+    private Optional<@ExtractedValue @Size(max = 100) String> stateRegion = Optional.empty();
 
-    @Size(max = 20)
-    private Optional<String> postalCode = Optional.empty();
+    private Optional<@ExtractedValue @Size(max = 20) String> postalCode = Optional.empty();
 
-    @Size(min = 2, max = 2)
-    private Optional<String> countryCode = Optional.empty();
+    private Optional<@ExtractedValue @Size(min = 2, max = 2) String> countryCode = Optional.empty();
 
 }

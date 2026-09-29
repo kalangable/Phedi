@@ -1,9 +1,14 @@
 package com.phedi.application.party.item;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
+import com.phedi.application.party.Findable;
+import com.phedi.application.party.Updatable;
 import com.phedi.domain.party.exception.InvalidIdentificationException;
 import com.phedi.domain.party.model.Identifier;
+import com.phedi.domain.party.model.Organization;
 import com.phedi.domain.party.model.item.IdentityDocumentType;
 import com.phedi.domain.party.model.item.PartyIdentityDocument;
 import com.phedi.domain.party.repository.item.PartyIdentityDocumentRepository;
@@ -13,14 +18,14 @@ import lombok.RequiredArgsConstructor;
 
 @Service 
 @RequiredArgsConstructor
-public class PartyIdentityDocumentService implements PartyIdentityDocumentCreationService {
+public class PartyIdentityDocumentService implements PartyItemCreatable<PartyIdentityDocument>, Findable<PartyIdentityDocument>, PartyItemListable<PartyIdentityDocument>, Updatable<PartyIdentityDocument> {
 
     private final PartyIdentityDocumentRepository partyIdentityDocumentRepository;
     private final IdentificationValidationService validationService;
 
 
     @Override
-    public PartyIdentityDocument createIdentityDocument(Identifier partyIdentifier, PartyIdentityDocument identityDocument) {
+    public PartyIdentityDocument createItem(Identifier partyIdentifier, PartyIdentityDocument identityDocument) {
 
         validateIdentification(identityDocument.getIdentityDocumentType(), identityDocument.getIdentityDocumentNumber());
 
@@ -37,6 +42,22 @@ public class PartyIdentityDocumentService implements PartyIdentityDocumentCreati
         if (!validationService.validate(identityDocumentType.name(), identificationNumber)) {
             throw new InvalidIdentificationException(identityDocumentType.name(), identificationNumber);
         }
+    }
+
+    @Override
+    public PartyIdentityDocument findByIdentifier(Identifier identifier) {
+        return partyIdentityDocumentRepository.findByIdentifier(identifier).orElseThrow(() -> new RuntimeException());
+    }
+
+    @Override
+    public List<PartyIdentityDocument> findAllByParty(Identifier partyIdentifier) {
+        return partyIdentityDocumentRepository.findAllByParty(partyIdentifier);
+    }
+
+    @Override
+    public PartyIdentityDocument update(PartyIdentityDocument document) {
+        var existingItem = findByIdentifier(document.getIdentifier());
+        return partyIdentityDocumentRepository.update(document);
     }
 
 }

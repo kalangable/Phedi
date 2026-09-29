@@ -12,7 +12,7 @@ import com.phedi.infrastructure.web.party.dto.CreateOrganizationRequest;
 import com.phedi.infrastructure.web.party.dto.OrganizationResponse;
 import com.phedi.infrastructure.web.party.dto.UpdateOrganizationRequest;
 
-@Mapper(componentModel = "spring", uses = IdentityDocumentMapper.class)
+@Mapper(componentModel = "spring")
 public interface OrganizationDomainMapper {
 
     @Mapping(target = "identifier", ignore = true)
