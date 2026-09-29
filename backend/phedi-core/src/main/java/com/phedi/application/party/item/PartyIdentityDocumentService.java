@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.phedi.application.party.Deletable;
 import com.phedi.application.party.Findable;
+import com.phedi.application.party.StatusChangeable;
 import com.phedi.application.party.Updatable;
 import com.phedi.domain.party.exception.InvalidIdentificationException;
 import com.phedi.domain.party.model.Identifier;
@@ -19,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @Service 
 @Transactional
 @RequiredArgsConstructor
-public class PartyIdentityDocumentService implements PartyItemCreatable<PartyIdentityDocument>, Findable<PartyIdentityDocument>, PartyItemListable<PartyIdentityDocument>, Updatable<PartyIdentityDocument> {
+public class PartyIdentityDocumentService implements PartyItemCreatable<PartyIdentityDocument>, Findable<PartyIdentityDocument>, PartyItemListable<PartyIdentityDocument>, Updatable<PartyIdentityDocument>, StatusChangeable, Deletable {
 
     private final PartyIdentityDocumentRepository partyIdentityDocumentRepository;
     private final IdentificationValidationService validationService;
@@ -55,6 +57,21 @@ public class PartyIdentityDocumentService implements PartyItemCreatable<PartyIde
     @Override
     public PartyIdentityDocument update(PartyIdentityDocument document) {
         return partyIdentityDocumentRepository.update(document);
+    }
+
+    @Override
+    public void delete(Identifier identifier) {
+        partyIdentityDocumentRepository.deleteByIdentifier(identifier);
+    }
+
+    @Override
+    public void activate(Identifier identifier) {
+        partyIdentityDocumentRepository.activate(identifier);
+    }
+
+    @Override
+    public void deactivate(Identifier identifier) {
+        partyIdentityDocumentRepository.deactivate(identifier);
     }
 
 }
