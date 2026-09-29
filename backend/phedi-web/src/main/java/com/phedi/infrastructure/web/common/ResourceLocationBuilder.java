@@ -11,26 +11,30 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class ResourceLocationBuilder {
 
     public URI build(Object... pathVariables) {
-        String currentPath = ServletUriComponentsBuilder.fromCurrentRequest().build().getPath();
-        String suffix = Arrays.stream(pathVariables)
-                .map(Object::toString)
-                .collect(Collectors.joining("/"));
-        return URI.create(currentPath + (suffix.isBlank() ? "" : "/" + suffix));
+        String path = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path(suffixOf(pathVariables))
+                .build()
+                .getPath();
+
+        return URI.create(path);
     }
 
-    /**
-     * Monta a Location de um recurso "plano" (identificado por public_id global),
-     * a partir do context-path — ex.: /api/v1/documents/{public_id}
-     * (documento de identificação).
-     */
     public URI buildFlat(String resourcePath, Object... pathVariables) {
+        String path = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(resourcePath)
+                .path(suffixOf(pathVariables))
+                .build()
+                .getPath();
+
+        return URI.create(path);
+    }
+
+    private static String suffixOf(Object... pathVariables) {
         String suffix = Arrays.stream(pathVariables)
                 .map(Object::toString)
                 .collect(Collectors.joining("/"));
-        return ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(resourcePath)
-                .path(suffix.isBlank() ? "" : "/" + suffix)
-                .build()
-                .toUri();
+
+        return suffix.isBlank() ? "" : "/" + suffix;
     }
+
 }
