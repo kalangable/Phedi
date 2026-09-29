@@ -21,9 +21,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/organizations")
+@RequestMapping("/parties")
 @RequiredArgsConstructor
-public class OrganizationIdentityDocumentController {
+public class PartyIdentityDocumentController {
 
     private final PartyIdentityDocumentService identityDocumentService;
     private final IdentityDocumentMapper mapper;
