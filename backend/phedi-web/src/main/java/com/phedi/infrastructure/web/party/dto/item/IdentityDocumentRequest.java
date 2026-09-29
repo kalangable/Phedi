@@ -1,6 +1,7 @@
 package com.phedi.infrastructure.web.party.dto.item;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import com.phedi.domain.party.model.item.IdentityDocumentType;
 
@@ -39,13 +40,33 @@ public class IdentityDocumentRequest extends PartyItemRequest {
 
     private LocalDate expiresAt;
 
-    /**
-     * Validação de consistência: a data de validade, quando informada,
-     * deve ser posterior (ou igual) à data de emissão.
-     */
-    @AssertTrue(message = "expiresAt deve ser posterior ou igual a issuedAt")
-    public boolean validDateRange() {
-        return issuedAt == null || expiresAt == null || !expiresAt.isBefore(issuedAt);
+    public Optional<IdentityDocumentType> getIdentityDocumentType() {
+        return Optional.ofNullable(identityDocumentType);
     }
+
+    public Optional<String> getCountryCode() {
+        return Optional.ofNullable(countryCode);
+    }
+
+    public Optional<String> getIdentityDocumentNumber() {
+        return Optional.ofNullable(identityDocumentNumber);
+    }
+
+    public Optional<String> getIssuerRegion() {
+        return Optional.ofNullable(issuerRegion);
+    }
+
+    public Optional<String> getIssuingAuthority() {
+        return Optional.ofNullable(issuingAuthority);
+    }
+
+    public Optional<LocalDate> getIssuedAt() {
+        return Optional.ofNullable(issuedAt);
+    }
+
+    public Optional<LocalDate> getExpiresAt() {
+        return Optional.ofNullable(expiresAt);
+    }
+
 
 }

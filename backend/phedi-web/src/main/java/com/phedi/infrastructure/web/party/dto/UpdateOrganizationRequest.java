@@ -1,44 +1,39 @@
 package com.phedi.infrastructure.web.party.dto;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
-import com.phedi.infrastructure.web.party.dto.item.UpdateAddressRequest;
-import com.phedi.infrastructure.web.party.dto.item.UpdateContactRequest;
-import com.phedi.infrastructure.web.party.dto.item.UpdateIdentityDocumentRequest;
-
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
-import jakarta.validation.valueextraction.ExtractedValue;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-/**
- * Payload parcial para PATCH: campos ausentes (Optional.empty) não são
- * alterados. Uma seção (contacts/addresses/documents) que não vier no JSON
- * (null) não é alterada; uma lista vazia presente esvazia a seção; uma lista
- * presente substitui a lista inteira.
- */
 @Data
-@NoArgsConstructor
 public class UpdateOrganizationRequest {
 
-    private Optional<@ExtractedValue @Size(max = 200) String> legalName = Optional.empty();
+    @Size(max = 200)
+    private String legalName;
 
-    private Optional<@ExtractedValue @Size(max = 200) String> tradeName = Optional.empty();
+    @Size(max = 200)
+    private String tradeName;
 
-    private Optional<@ExtractedValue @Size(max = 200) String> brandName = Optional.empty();
+    @Size(max = 200)
+    private String brandName;
 
-    private Optional<LocalDate> foundingDate = Optional.empty();
+    private LocalDate foundingDate;
 
-    @Valid
-    private List<UpdateContactRequest> contacts;
+    public Optional<String> getLegalName() {
+        return Optional.ofNullable(legalName);
+    }
 
-    @Valid
-    private List<UpdateAddressRequest> addresses;
+    public Optional<String> getTradeName() {
+        return Optional.ofNullable(tradeName);
+    }
 
-    @Valid
-    private List<UpdateIdentityDocumentRequest> documents;
+    public Optional<String> getBrandName() {
+        return Optional.ofNullable(brandName);
+    }
+
+    public Optional<LocalDate> getFoundingDate() {
+        return Optional.ofNullable(foundingDate);
+    }
 
 }

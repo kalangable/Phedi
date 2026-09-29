@@ -5,9 +5,7 @@ import java.util.Optional;
 
 import com.phedi.domain.party.model.item.IdentityDocumentType;
 
-import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Size;
-import jakarta.validation.valueextraction.ExtractedValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,28 +13,49 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class UpdateIdentityDocumentRequest extends PartyItemUpdateRequest {
 
-    private Optional<IdentityDocumentType> identityDocumentType = Optional.empty();
+    private IdentityDocumentType identityDocumentType;
 
-    private Optional<@ExtractedValue @Size(max = 100) String> identityDocumentNumber = Optional.empty();
+    @Size(max = 100)
+    private String identityDocumentNumber;
 
-    private Optional<@ExtractedValue @Size(min = 2, max = 2) String> countryCode = Optional.empty();
+    @Size(min = 2, max = 2)
+    private String countryCode;
 
-    private Optional<@ExtractedValue @Size(max = 10) String> issuerRegion = Optional.empty();
+    @Size(max = 10)
+    private String issuerRegion;
 
-    private Optional<@ExtractedValue @Size(max = 100) String> issuingAuthority = Optional.empty();
+    @Size(max = 100)
+    private String issuingAuthority;
 
-    private Optional<LocalDate> issuedAt = Optional.empty();
+    private LocalDate issuedAt;
 
-    private Optional<LocalDate> expiresAt = Optional.empty();
+    private LocalDate expiresAt;
 
-    /**
-     * Consistência: validade, quando informada, deve ser posterior ou igual à
-     * emissão.
-     */
-    @AssertTrue(message = "expiresAt deve ser posterior ou igual a issuedAt")
-    public boolean validDateRange() {
-        return issuedAt.isEmpty() || expiresAt.isEmpty()
-                || !expiresAt.get().isBefore(issuedAt.get());
+    public Optional<IdentityDocumentType> getIdentityDocumentType() {
+        return Optional.ofNullable(identityDocumentType);
     }
 
+    public Optional<String> getCountryCode() {
+        return Optional.ofNullable(countryCode);
+    }
+
+    public Optional<String> getIdentityDocumentNumber() {
+        return Optional.ofNullable(identityDocumentNumber);
+    }
+
+    public Optional<String> getIssuerRegion() {
+        return Optional.ofNullable(issuerRegion);
+    }
+
+    public Optional<String> getIssuingAuthority() {
+        return Optional.ofNullable(issuingAuthority);
+    }
+
+    public Optional<LocalDate> getIssuedAt() {
+        return Optional.ofNullable(issuedAt);
+    }
+
+    public Optional<LocalDate> getExpiresAt() {
+        return Optional.ofNullable(expiresAt);
+    }
 }

@@ -4,16 +4,18 @@ import java.util.Optional;
 
 import lombok.Data;
 
-/**
- * Espelho do PartyItem do domínio para updates parciais: campos opcionais e o
- * identifier (public_id do item existente) usado para casar com o registro —
- * ausente significa novo item.
- */
 @Data
 public abstract class PartyItemUpdateRequest {
 
-    private Optional<String> identifier = Optional.empty();
+    private String identifier;
 
-    private Optional<Boolean> primary = Optional.empty();
+    private Boolean primary;
 
+    public Optional<String> getIdentifier() {
+        return Optional.ofNullable(identifier);
+    }
+
+    public Optional<Boolean> getPrimary() {
+        return Optional.ofNullable(primary);
+    }
 }
