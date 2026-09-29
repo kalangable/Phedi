@@ -32,12 +32,28 @@ public class CreateOrganizationRequest {
 
     private LocalDate foundingDate;
 
+    /**
+     * Aceitos pelo payload mas ainda nao persistidos: nao existe repositorio
+     * de contatos. O {@code OrganizationMapper} ignora a lista de forma
+     * explicita. Enquanto isso, o campo so cumpre papel de documentacao do
+     * contrato — e valida-lo e um trabalho jogado fora.
+     */
     @Valid
     private List<ContactRequest> contacts;
 
+    /**
+     * Aceitos pelo payload mas ainda nao persistidos: nao existe repositorio
+     * de enderecos. Ver {@link #contacts}.
+     */
     @Valid
     private List<AddressRequest> addresses;
 
+    /**
+     * Documentos de identificacao aninhados: sao persistidos junto com a
+     * organizacao, cada um com o seu identificador gerado e respeitando a
+     * regra de primary. Exigir ao menos um mantem a promessa de que toda
+     * organizacao nasce identificada.
+     */
     @Valid
     @NotEmpty
     private List<IdentityDocumentRequest> documents;

@@ -3,6 +3,7 @@ package com.phedi.application.party.item;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.phedi.application.party.Findable;
 import com.phedi.application.party.Updatable;
@@ -16,6 +17,7 @@ import com.phedi.domain.party.validation.IdentificationValidationService;
 import lombok.RequiredArgsConstructor;
 
 @Service 
+@Transactional
 @RequiredArgsConstructor
 public class PartyIdentityDocumentService implements PartyItemCreatable<PartyIdentityDocument>, Findable<PartyIdentityDocument>, PartyItemListable<PartyIdentityDocument>, Updatable<PartyIdentityDocument> {
 
@@ -27,8 +29,6 @@ public class PartyIdentityDocumentService implements PartyItemCreatable<PartyIde
 
         validateIdentification(identityDocument.getIdentityDocumentType(), identityDocument.getIdentityDocumentNumber());
 
-        // Regra do agregado: só um documento primary por seção.
-        // Se o novo documento é primary, o atual é demovido.
         if (Boolean.TRUE.equals(identityDocument.getPrimary())) {
             partyIdentityDocumentRepository.demotePrimary(partyIdentifier);
         }
