@@ -1,11 +1,11 @@
 package com.phedi.domain.party.model;
 
-public record PartyIdentifier(String value) {
+public record Identifier(String value) {
 
-    public PartyIdentifier {
+    public Identifier {
         if (value == null || value.isBlank()) {
             throw new IllegalArgumentException(
-                    "Party identifier cannot be empty");
+                    "Identifier cannot be empty");
         }
     }
 

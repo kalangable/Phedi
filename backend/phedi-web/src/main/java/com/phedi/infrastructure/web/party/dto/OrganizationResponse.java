@@ -1,19 +1,20 @@
 package com.phedi.infrastructure.web.party.dto;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.phedi.infrastructure.web.party.dto.item.IdentityDocumentResponse;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class OrganizationResponse {
 
-    private String partyIdentifier;
-
-    private String identificationType;
-
-    private String identificationNumber;
+    private String identifier;
 
     private String legalName;
 
@@ -24,5 +25,7 @@ public class OrganizationResponse {
     private LocalDate foundingDate;
 
     private Boolean isActive;
+
+    private List<IdentityDocumentResponse> documents;
 
 }

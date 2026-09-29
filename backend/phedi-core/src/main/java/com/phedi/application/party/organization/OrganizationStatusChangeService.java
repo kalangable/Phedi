@@ -1,11 +1,6 @@
 package com.phedi.application.party.organization;
 
-import com.phedi.domain.party.model.PartyIdentifier;
+import com.phedi.application.party.StatusChangeable;
 
-public interface OrganizationStatusChangeService {
-
-    void activate(PartyIdentifier partyIdentifier);
-
-    void deactivate(PartyIdentifier partyIdentifier);
-
+public interface OrganizationStatusChangeService extends StatusChangeable {
 }

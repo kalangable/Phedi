@@ -1,9 +1,7 @@
 package com.phedi.application.party.organization;
 
-import com.phedi.domain.party.model.PartyIdentifier;
+import com.phedi.application.party.Deletable;
 
-public interface OrganizationDeletionService {
-
-        void delete(PartyIdentifier partyIdentifier);
+public interface OrganizationDeletionService extends Deletable {
 
 }

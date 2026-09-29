@@ -8,11 +8,15 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import com.phedi.domain.party.model.PartyType;
 
 @Entity 
 @Table (name = "organization")
 @PrimaryKeyJoinColumn (name = "id")
-@EqualsAndHashCode (callSuper = false)
+@EqualsAndHashCode (callSuper = true)
+@ToString (callSuper = true)
 @Data 
 public class OrganizationEntity extends PartyEntity{
 
@@ -27,12 +31,6 @@ public class OrganizationEntity extends PartyEntity{
 
     @Column(name = "founding_date")
     private LocalDate foundingDate;
-
-    @Column(name = "primary_identification_type", length = 20)
-    private String identificationType;
-
-    @Column(name = "primary_identification_document", length = 50)
-    private String identificationNumber;
 
     // Constructors
     public OrganizationEntity() {

@@ -1,24 +1,32 @@
 package com.phedi.domain.party.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.phedi.domain.party.model.item.PartyAddress;
+import com.phedi.domain.party.model.item.PartyContact;
+import com.phedi.domain.party.model.item.PartyIdentityDocument;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Data 
-public abstract class Party {
+@Data
+@EqualsAndHashCode(callSuper = true)
+public abstract class Party extends PartyBase {
 
-    private PartyIdentifier partyIdentifier;
+    private PartyType partyType;
 
-    private String identificationType;
+    private List<PartyContact> contacts = new ArrayList<>();
 
-    private String identificationNumber;
+    private List<PartyAddress> addresses = new ArrayList<>();
 
-    private Boolean isActive;
+    private List<PartyIdentityDocument> documents = new ArrayList<>();
 
-    public void activate() {
-        this.isActive = true;
+    protected Party() {
     }
 
-    public void deactivate() {
-        this.isActive = false;
+    protected Party(PartyType partyType) {
+        this.partyType = partyType;
     }
 
 }

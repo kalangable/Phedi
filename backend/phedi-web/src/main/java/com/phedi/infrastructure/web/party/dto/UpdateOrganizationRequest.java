@@ -1,15 +1,12 @@
 package com.phedi.infrastructure.web.party.dto;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor 
-@NoArgsConstructor 
 public class UpdateOrganizationRequest {
 
     @Size(max = 200)
@@ -23,10 +20,20 @@ public class UpdateOrganizationRequest {
 
     private LocalDate foundingDate;
 
-    @Size(max = 20)
-    private String identificationType;
+    public Optional<String> getLegalName() {
+        return Optional.ofNullable(legalName);
+    }
 
-    @Size(max = 50)
-    private String identificationNumber;
+    public Optional<String> getTradeName() {
+        return Optional.ofNullable(tradeName);
+    }
+
+    public Optional<String> getBrandName() {
+        return Optional.ofNullable(brandName);
+    }
+
+    public Optional<LocalDate> getFoundingDate() {
+        return Optional.ofNullable(foundingDate);
+    }
 
 }

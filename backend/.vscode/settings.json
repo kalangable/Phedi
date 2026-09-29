@@ -1,4 +1,13 @@
 {
     "java.configuration.updateBuildConfiguration": "interactive",
-    "java.autobuild.enabled": false
+    "java.autobuild.enabled": false,
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-21",
+            "path": "/home/akrasovovski/.local/share/mise/installs/java/temurin-21",
+            "default": true
+        }
+    ],
+    "java.jdt.ls.java.home": "/home/akrasovovski/.local/share/mise/installs/java/temurin-21",
+    "maven.executable.path": "/home/akrasovovski/.local/share/mise/installs/maven/3.9/apache-maven-3.9.16/bin/mvn"
 }

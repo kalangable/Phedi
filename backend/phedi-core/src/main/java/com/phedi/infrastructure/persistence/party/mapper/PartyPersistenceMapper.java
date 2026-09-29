@@ -1,17 +1,17 @@
 package com.phedi.infrastructure.persistence.party.mapper;
 
+import com.phedi.domain.party.model.Identifier;
 import com.phedi.domain.party.model.Party;
-import com.phedi.domain.party.model.PartyIdentifier;
 import com.phedi.infrastructure.persistence.party.entity.PartyEntity;
 
-public interface PartyPersistenceMapper<D extends Party, E extends PartyEntity> extends PersistenceMapper<D, E> {
+public interface PartyPersistenceMapper<DOMAIN extends Party, ENTITY extends PartyEntity> extends PersistenceMapper<DOMAIN, ENTITY> {
 
-    default PartyIdentifier mapStringToPartyIdentifier(String value) {
+    default Identifier mapStringToIdentifier(String value) {
         if (value == null || value.isBlank()) {
             return null;
         }
 
-        return new PartyIdentifier(value);
+        return new Identifier(value);
     }
 
 }
