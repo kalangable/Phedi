@@ -54,7 +54,6 @@ public class PartyIdentityDocumentService implements PartyItemCreatable<PartyIde
 
     @Override
     public PartyIdentityDocument update(PartyIdentityDocument document) {
-        var existingItem = findByIdentifier(document.getIdentifier());
         return partyIdentityDocumentRepository.update(document);
     }
 
