@@ -3,9 +3,14 @@ package com.phedi.support;
 import static org.instancio.Instancio.gen;
 import static org.instancio.Select.field;
 
+import java.util.List;
+
 import org.instancio.Instancio;
 
 import com.phedi.domain.party.model.Identifier;
+import com.phedi.domain.party.model.Organization;
+import com.phedi.domain.party.model.Party;
+import com.phedi.domain.party.model.PartyBase;
 import com.phedi.domain.party.model.PartyType;
 import com.phedi.domain.party.model.item.IdentityDocumentType;
 import com.phedi.domain.party.model.item.PartyIdentityDocument;
@@ -23,6 +28,17 @@ public final class PartyTestFixtures {
                 .set(field(PartyEntity::getPartyType), PartyType.ORGANIZATION)
                 .set(field(PartyEntity::getIsActive), true)
                 .set(field(PartyEntity::getIsDeleted), false)
+                .create();
+    }
+
+    public static Organization organizationDomain() {
+        return Instancio.of(Organization.class)
+                .set(field(Party::getPartyType), PartyType.ORGANIZATION)
+                .set(field(PartyBase::getIdentifier), identifier())
+                .set(field(PartyBase::getIsActive), true)
+                .set(field(Party::getContacts), List.of())
+                .set(field(Party::getAddresses), List.of())
+                .set(field(Party::getDocuments), List.of())
                 .create();
     }
 
