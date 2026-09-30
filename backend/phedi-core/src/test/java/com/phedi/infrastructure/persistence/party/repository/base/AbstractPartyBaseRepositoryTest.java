@@ -41,7 +41,7 @@ class AbstractPartyBaseRepositoryTest {
 
     private AbstractPartyBaseRepository<Organization, OrganizationEntity> repository;
 
-    private static final String PUBLIC_ID = PartyTestFixtures.identifier().value();
+    private static Identifier PUBLIC_ID = PartyTestFixtures.identifier();
 
     @BeforeEach
     void setUp() {
@@ -63,13 +63,13 @@ class AbstractPartyBaseRepositoryTest {
     @Test
     void shouldThrowWhenUpdatingUnknownOrganization() {
         Organization domain = organizationDomain();
-        domain.setIdentifier(new Identifier(PUBLIC_ID));
+        domain.setIdentifier(PUBLIC_ID);
 
-        when(jpaRepository.findByPublicIdAndIsDeletedFalse(PUBLIC_ID)).thenReturn(Optional.empty());
+        when(repository.getEntityByIdentifier(PUBLIC_ID)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> repository.update(domain))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Organization not found: " + PUBLIC_ID);
+                .hasMessage("Organization not found: " + PUBLIC_ID.value());
 
         verify(jpaRepository, never()).save(any());
     }
@@ -77,10 +77,11 @@ class AbstractPartyBaseRepositoryTest {
     @Test
     void shouldUpdateLoadedEntityAndSave() {
         Organization domain = organizationDomain();
-        domain.setIdentifier(new Identifier(PUBLIC_ID));
+        domain.setIdentifier(PUBLIC_ID);
         OrganizationEntity existing = organization();
 
-        when(jpaRepository.findByPublicIdAndIsDeletedFalse(PUBLIC_ID)).thenReturn(Optional.of(existing));
+        when(repository.getEntityByIdentifier(PUBLIC_ID)).thenReturn(Optional.of(existing));
+
         when(jpaRepository.save(existing)).thenReturn(existing);
 
         when(mapper.toDomain(existing)).thenReturn(domain);
@@ -94,14 +95,20 @@ class AbstractPartyBaseRepositoryTest {
     }
 
     @Test
+    void shouldReturnOptionalEmptyWhenNotFoundEntityNoThrowsException() {
+        when(repository.getEntityByIdentifier(PUBLIC_ID)).thenReturn(Optional.empty());
+        assertThat(repository.findByIdentifier(PUBLIC_ID)).isEmpty();
+    }
+
+    @Test
     void shouldSoftDeleteOnDelete() {
         OrganizationEntity entity = organization();
 
-        when(jpaRepository.findByPublicIdAndIsDeletedFalse(PUBLIC_ID)).thenReturn(Optional.of(entity));
+        when(repository.getEntityByIdentifier(PUBLIC_ID)).thenReturn(Optional.of(entity));
         when(jpaRepository.save(entity)).thenReturn(entity);
         when(auditorAware.getCurrentAuditor()).thenReturn(Optional.of("alice"));
 
-        repository.deleteByIdentifier(new Identifier(PUBLIC_ID));
+        repository.deleteByIdentifier(PUBLIC_ID);
 
         assertThat(entity.getIsDeleted()).isTrue();
         assertThat(entity.getDeletedAt()).isNotNull();
@@ -111,9 +118,9 @@ class AbstractPartyBaseRepositoryTest {
 
     @Test
     void shouldNotSaveWhenDeletingUnknown() {
-        when(jpaRepository.findByPublicIdAndIsDeletedFalse(PUBLIC_ID)).thenReturn(Optional.empty());
+        when(repository.getEntityByIdentifier(PUBLIC_ID)).thenReturn(Optional.empty());
 
-        repository.deleteByIdentifier(new Identifier(PUBLIC_ID));
+        repository.deleteByIdentifier(PUBLIC_ID);
 
         verify(jpaRepository, never()).save(any());
     }
@@ -123,11 +130,11 @@ class AbstractPartyBaseRepositoryTest {
         OrganizationEntity entity = organization();
         entity.setIsActive(false);
 
-        when(jpaRepository.findByPublicIdAndIsDeletedFalse(PUBLIC_ID)).thenReturn(Optional.of(entity));
+        when(repository.getEntityByIdentifier(PUBLIC_ID)).thenReturn(Optional.of(entity));
         when(jpaRepository.save(entity)).thenReturn(entity);
         when(auditorAware.getCurrentAuditor()).thenReturn(Optional.of("alice"));
 
-        repository.activate(new Identifier(PUBLIC_ID));
+        repository.activate(PUBLIC_ID);
 
         assertThat(entity.getIsActive()).isTrue();
         assertThat(entity.getUpdatedBy()).isEqualTo("alice");
@@ -136,9 +143,9 @@ class AbstractPartyBaseRepositoryTest {
 
     @Test
     void shouldNotSaveWhenActivatingUnknown() {
-        when(jpaRepository.findByPublicIdAndIsDeletedFalse(PUBLIC_ID)).thenReturn(Optional.empty());
+        when(repository.getEntityByIdentifier(PUBLIC_ID)).thenReturn(Optional.empty());
 
-        repository.activate(new Identifier(PUBLIC_ID));
+        repository.activate(PUBLIC_ID);
 
         verify(jpaRepository, never()).save(any());
     }
@@ -147,11 +154,11 @@ class AbstractPartyBaseRepositoryTest {
     void shouldDeactivate() {
         OrganizationEntity entity = organization();
 
-        when(jpaRepository.findByPublicIdAndIsDeletedFalse(PUBLIC_ID)).thenReturn(Optional.of(entity));
+        when(repository.getEntityByIdentifier(PUBLIC_ID)).thenReturn(Optional.of(entity));
         when(jpaRepository.save(entity)).thenReturn(entity);
         when(auditorAware.getCurrentAuditor()).thenReturn(Optional.of("alice"));
 
-        repository.deactivate(new Identifier(PUBLIC_ID));
+        repository.deactivate(PUBLIC_ID);
 
         assertThat(entity.getIsActive()).isFalse();
         assertThat(entity.getUpdatedBy()).isEqualTo("alice");
@@ -160,9 +167,9 @@ class AbstractPartyBaseRepositoryTest {
 
     @Test
     void shouldNotSaveWhenDeactivatingUnknown() {
-        when(jpaRepository.findByPublicIdAndIsDeletedFalse(PUBLIC_ID)).thenReturn(Optional.empty());
+        when(repository.getEntityByIdentifier(PUBLIC_ID)).thenReturn(Optional.empty());
 
-        repository.deactivate(new Identifier(PUBLIC_ID));
+        repository.deactivate(PUBLIC_ID);
 
         verify(jpaRepository, never()).save(any());
     }
@@ -171,11 +178,11 @@ class AbstractPartyBaseRepositoryTest {
     void shouldUseSystemAsFallbackAuditor() {
         OrganizationEntity entity = organization();
 
-        when(jpaRepository.findByPublicIdAndIsDeletedFalse(PUBLIC_ID)).thenReturn(Optional.of(entity));
+        when(repository.getEntityByIdentifier(PUBLIC_ID)).thenReturn(Optional.of(entity));
         when(jpaRepository.save(entity)).thenReturn(entity);
         when(auditorAware.getCurrentAuditor()).thenReturn(Optional.empty());
 
-        repository.activate(new Identifier(PUBLIC_ID));
+        repository.activate(PUBLIC_ID);
 
         assertThat(entity.getUpdatedBy()).isEqualTo("SYSTEM");
     }

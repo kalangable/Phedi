@@ -25,7 +25,7 @@ public abstract class AbstractPartyBaseRepository<DOMAIN extends PartyBase, ENTI
 
     @Override
     public Optional<DOMAIN> findByIdentifier(Identifier identifier) {
-        return jpaRepository.findByPublicIdAndIsDeletedFalse(identifier.value())
+        return getEntityByIdentifier(identifier)
                 .map(mapper::toDomain);
     }
 
@@ -47,7 +47,7 @@ public abstract class AbstractPartyBaseRepository<DOMAIN extends PartyBase, ENTI
     }
 
     protected ENTITY getExistingEntity(DOMAIN domain) {
-        return jpaRepository.findByPublicIdAndIsDeletedFalse(domain.getIdentifier().value())
+        return getEntityByIdentifier(domain.getIdentifier())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         String.format("%s not found: %s", domain.getClass().getSimpleName(),
                                 domain.getIdentifier().value())));
@@ -55,7 +55,7 @@ public abstract class AbstractPartyBaseRepository<DOMAIN extends PartyBase, ENTI
 
     @Override
     public void deleteByIdentifier(Identifier identifier) {
-        jpaRepository.findByPublicIdAndIsDeletedFalse(identifier.value())
+        getEntityByIdentifier(identifier)
                 .ifPresent(entity -> {
                     entity.softDelete();
                     entity.setDeletedBy(currentAuditor());
@@ -65,7 +65,7 @@ public abstract class AbstractPartyBaseRepository<DOMAIN extends PartyBase, ENTI
 
     @Override
     public void activate(Identifier identifier) {
-        jpaRepository.findByPublicIdAndIsDeletedFalse(identifier.value())
+        getEntityByIdentifier(identifier)
                 .ifPresent(entity -> {
                     entity.activate();
                     entity.setUpdatedBy(currentAuditor());
@@ -75,13 +75,18 @@ public abstract class AbstractPartyBaseRepository<DOMAIN extends PartyBase, ENTI
 
     @Override
     public void deactivate(Identifier identifier) {
-        jpaRepository.findByPublicIdAndIsDeletedFalse(identifier.value())
+        getEntityByIdentifier(identifier)
                 .ifPresent(entity -> {
                     entity.deactivate();
                     entity.setUpdatedBy(currentAuditor());
                     jpaRepository.save(entity);
                 });
     }
+
+    protected Optional<ENTITY> getEntityByIdentifier(Identifier identifier) {
+        return jpaRepository.findByPublicIdAndIsDeletedFalse(identifier.value());
+    }
+    
 
     protected abstract String currentAuditor();
 }
