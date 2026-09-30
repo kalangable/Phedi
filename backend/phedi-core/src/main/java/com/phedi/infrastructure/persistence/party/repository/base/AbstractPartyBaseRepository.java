@@ -8,6 +8,7 @@ import com.phedi.domain.party.model.Identifier;
 import com.phedi.domain.party.model.PartyBase;
 import com.phedi.domain.party.repository.PartyBaseRepository;
 import com.phedi.domain.party.service.PublicIdGenerator;
+import com.phedi.infrastructure.persistence.exception.ResourceNotFoundException;
 import com.phedi.infrastructure.persistence.party.entity.base.AbstractEntity;
 import com.phedi.infrastructure.persistence.party.mapper.PersistenceMapper;
 
@@ -30,19 +31,26 @@ public abstract class AbstractPartyBaseRepository<DOMAIN extends PartyBase, ENTI
 
     @Override
     public DOMAIN update(DOMAIN domain) {
-        if (domain.getIdentifier() == null || domain.getIdentifier().value().isBlank()) {
-            throw new IllegalArgumentException("Identifier is required for update");
-        }
-
-        ENTITY existing = jpaRepository.findByPublicIdAndIsDeletedFalse(domain.getIdentifier().value())
-                .orElseThrow(() -> new RuntimeException(
-                        String.format("%s not found: %s", domain.getClass().getSimpleName(),
-                                domain.getIdentifier().value())));
+        checkIdentifierExist(domain);
+        ENTITY existing = getExistingEntity(domain);
 
         mapper.updateEntity(domain, existing);
         existing.setUpdatedBy(currentAuditor());
 
         return mapper.toDomain(jpaRepository.save(existing));
+    }
+
+    protected void checkIdentifierExist(DOMAIN domain) {
+        if (domain.getIdentifier() == null || domain.getIdentifier().value().isBlank()) {
+            throw new IllegalArgumentException("Identifier is required for update");
+        }
+    }
+
+    protected ENTITY getExistingEntity(DOMAIN domain) {
+        return jpaRepository.findByPublicIdAndIsDeletedFalse(domain.getIdentifier().value())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        String.format("%s not found: %s", domain.getClass().getSimpleName(),
+                                domain.getIdentifier().value())));
     }
 
     @Override

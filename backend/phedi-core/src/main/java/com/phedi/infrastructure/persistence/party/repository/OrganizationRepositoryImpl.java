@@ -12,7 +12,7 @@ import com.phedi.infrastructure.persistence.party.repository.base.PartyBaseJpaRe
 @Repository
 public class OrganizationRepositoryImpl extends AbstractPartyRepository<Organization, OrganizationEntity> implements OrganizationRepository {
 
-    protected OrganizationRepositoryImpl(
+    public OrganizationRepositoryImpl(
             PartyBaseJpaRepository<OrganizationEntity> jpaRepository,
             PartyPersistenceMapper<Organization, OrganizationEntity> mapper) {
         super(jpaRepository, mapper);

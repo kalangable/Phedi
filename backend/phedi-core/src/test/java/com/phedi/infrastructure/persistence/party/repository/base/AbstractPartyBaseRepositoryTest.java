@@ -1,4 +1,4 @@
-package com.phedi.infrastructure.persistence.party.repository;
+package com.phedi.infrastructure.persistence.party.repository.base;
 
 import static com.phedi.support.PartyTestFixtures.organization;
 import static com.phedi.support.PartyTestFixtures.organizationDomain;
@@ -21,9 +21,10 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.phedi.domain.party.model.Identifier;
 import com.phedi.domain.party.model.Organization;
+import com.phedi.infrastructure.persistence.exception.ResourceNotFoundException;
 import com.phedi.infrastructure.persistence.party.entity.OrganizationEntity;
 import com.phedi.infrastructure.persistence.party.mapper.PartyPersistenceMapper;
-import com.phedi.infrastructure.persistence.party.repository.base.PartyBaseJpaRepository;
+import com.phedi.infrastructure.persistence.party.repository.OrganizationRepositoryImpl;
 import com.phedi.support.PartyTestFixtures;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,7 +39,7 @@ class AbstractPartyBaseRepositoryTest {
     @Mock
     private AuditorAware<String> auditorAware;
 
-    private OrganizationRepositoryImpl repository;
+    private AbstractPartyBaseRepository<Organization, OrganizationEntity> repository;
 
     private static final String PUBLIC_ID = PartyTestFixtures.identifier().value();
 
@@ -54,11 +55,9 @@ class AbstractPartyBaseRepositoryTest {
         Organization domain = organizationDomain();
         domain.setIdentifier(null);
 
-        assertThatThrownBy(() -> repository.update(domain))
+        assertThatThrownBy(() -> repository.checkIdentifierExist(domain))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Identifier is required for update");
-
-        verify(jpaRepository, never()).save(any());
     }
 
     @Test
@@ -69,7 +68,7 @@ class AbstractPartyBaseRepositoryTest {
         when(jpaRepository.findByPublicIdAndIsDeletedFalse(PUBLIC_ID)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> repository.update(domain))
-                .isInstanceOf(RuntimeException.class)
+                .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Organization not found: " + PUBLIC_ID);
 
         verify(jpaRepository, never()).save(any());
