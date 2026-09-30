@@ -19,6 +19,7 @@ import com.phedi.domain.party.model.Identifier;
 import com.phedi.infrastructure.persistence.party.entity.item.PartyIdentityDocumentEntity;
 import com.phedi.infrastructure.persistence.party.mapper.item.PartyIdentityDocumentPersistenceMapper;
 import com.phedi.infrastructure.persistence.party.repository.base.PartyJpaRepository;
+import com.phedi.support.PartyTestFixtures;
 
 @ExtendWith(MockitoExtension.class)
 class PartyIdentityDocumentRepositoryImplTest {
@@ -34,7 +35,7 @@ class PartyIdentityDocumentRepositoryImplTest {
 
     private PartyIdentityDocumentRepositoryImpl repository;
 
-    private static final String PARTY_PUBLIC_ID = "1000001";
+    private static final String PARTY_PUBLIC_ID = PartyTestFixtures.identifier().value();
 
     @BeforeEach
     void setUp() {
@@ -43,7 +44,7 @@ class PartyIdentityDocumentRepositoryImplTest {
 
     @Test
     void shouldDemoteExistingPrimaryDocument() {
-        PartyIdentityDocumentEntity current = new PartyIdentityDocumentEntity();
+        PartyIdentityDocumentEntity current = PartyTestFixtures.cnpjDocumentEntity();
         current.setPrimary(true);
 
         when(itemRepository.findByParty_PublicIdAndPrimaryTrueAndIsDeletedFalse(PARTY_PUBLIC_ID))
@@ -56,7 +57,7 @@ class PartyIdentityDocumentRepositoryImplTest {
 
     @Test
     void shouldSaveDemotedEntity() {
-        PartyIdentityDocumentEntity current = new PartyIdentityDocumentEntity();
+        PartyIdentityDocumentEntity current = PartyTestFixtures.cnpjDocumentEntity();
         current.setPrimary(true);
 
         when(itemRepository.findByParty_PublicIdAndPrimaryTrueAndIsDeletedFalse(PARTY_PUBLIC_ID))
