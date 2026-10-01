@@ -53,12 +53,6 @@ public interface PartyIdentityDocumentPersistenceMapper extends PartyItemPersist
      */
     @Override
     default void updateEntity(PartyIdentityDocument domain, @MappingTarget PartyIdentityDocumentEntity entity) {
-        if (domain.getIdentityDocumentType() != null) {
-            entity.setIdentityDocumentType(domain.getIdentityDocumentType());
-        }
-        if (domain.getIdentityDocumentNumber() != null) {
-            entity.setIdentityDocumentNumber(domain.getIdentityDocumentNumber());
-        }
         if (domain.getCountryCode() != null) {
             entity.setCountryCode(domain.getCountryCode());
         }
@@ -73,9 +67,6 @@ public interface PartyIdentityDocumentPersistenceMapper extends PartyItemPersist
         }
         if (domain.getExpiresAt() != null) {
             entity.setExpiresAt(domain.getExpiresAt());
-        }
-        if (domain.getPrimary() != null) {
-            entity.setPrimary(domain.getPrimary());
         }
     }
 
