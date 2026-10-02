@@ -19,9 +19,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import com.phedi.domain.party.exception.ResourceNotFoundException;
 import com.phedi.domain.party.model.Identifier;
 import com.phedi.domain.party.model.Organization;
-import com.phedi.infrastructure.persistence.exception.ResourceNotFoundException;
 import com.phedi.infrastructure.persistence.party.entity.OrganizationEntity;
 import com.phedi.infrastructure.persistence.party.mapper.PartyPersistenceMapper;
 import com.phedi.infrastructure.persistence.party.repository.OrganizationRepositoryImpl;
@@ -69,7 +69,7 @@ class AbstractPartyBaseRepositoryTest {
 
         assertThatThrownBy(() -> repository.update(domain))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Organization not found: " + PUBLIC_ID.value());
+                .hasMessage("Domain Organization not found: " + PUBLIC_ID.value());
 
         verify(jpaRepository, never()).save(any());
     }

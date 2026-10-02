@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.phedi.domain.party.exception.ResourceNotFoundException;
 import com.phedi.domain.party.model.Identifier;
 import com.phedi.domain.party.model.Organization;
 import com.phedi.domain.party.repository.OrganizationRepository;
-import com.phedi.infrastructure.persistence.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +30,11 @@ public class OrganizationService implements OrganizationCreationService, Organiz
     @Transactional(readOnly = true)
     public Organization findByIdentifier(Identifier identifier) {
         return organizationRepository.findByIdentifier(identifier)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        String.format("Organization not found: %s", identifier.value())));
+                .orElseThrow(() -> {
+                    var msg = String.format("Organization not found: %s", identifier.value());
+                    log.debug(msg);
+                    return new ResourceNotFoundException(msg);
+                    });
     }
 
     @Override

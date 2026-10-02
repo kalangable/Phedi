@@ -13,10 +13,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.phedi.domain.party.exception.ResourceNotFoundException;
 import com.phedi.domain.party.model.Identifier;
 import com.phedi.domain.party.model.Organization;
 import com.phedi.domain.party.repository.OrganizationRepository;
-import com.phedi.infrastructure.persistence.exception.ResourceNotFoundException;
 import com.phedi.support.PartyTestFixtures;
 
 @ExtendWith(MockitoExtension.class)
