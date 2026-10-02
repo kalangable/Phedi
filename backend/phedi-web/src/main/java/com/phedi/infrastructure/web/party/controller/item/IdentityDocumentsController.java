@@ -17,11 +17,13 @@ import com.phedi.infrastructure.web.party.dto.item.IdentityDocumentResponse;
 import com.phedi.infrastructure.web.party.dto.item.UpdateIdentityDocumentRequest;
 import com.phedi.infrastructure.web.party.mapper.IdentityDocumentMapper;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/documents")
+@Tag(name = "Identity Documents", description = "the Identity Documents Api")
 @RequiredArgsConstructor
 public class IdentityDocumentsController {
 

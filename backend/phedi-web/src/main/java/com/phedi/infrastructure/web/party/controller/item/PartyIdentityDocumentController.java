@@ -20,11 +20,13 @@ import com.phedi.infrastructure.web.party.dto.item.IdentityDocumentResponse;
 import com.phedi.infrastructure.web.party.mapper.IdentityDocumentMapper;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/parties")
+@Tag(name = "Organization", description = "the Organization Api")
 @RequiredArgsConstructor
 public class PartyIdentityDocumentController {
 

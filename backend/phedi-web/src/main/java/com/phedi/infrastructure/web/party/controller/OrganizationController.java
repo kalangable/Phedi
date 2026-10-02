@@ -23,11 +23,13 @@ import com.phedi.infrastructure.web.party.dto.UpdateOrganizationRequest;
 import com.phedi.infrastructure.web.party.mapper.OrganizationMapper;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/organizations")
+@Tag(name = "Organization", description = "the Organization Api")
 @RequiredArgsConstructor
 public class OrganizationController {
 
