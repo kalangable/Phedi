@@ -9,7 +9,12 @@ import com.phedi.infrastructure.persistence.party.entity.item.PartyIdentityDocum
 import com.phedi.infrastructure.persistence.party.mapper.item.PartyIdentityDocumentPersistenceMapper;
 import com.phedi.infrastructure.persistence.party.repository.base.PartyJpaRepository;
 
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
+
 @Repository
+@Slf4j 
+@Transactional
 public class PartyIdentityDocumentRepositoryImpl extends AbstractPartyItemRepository<PartyIdentityDocument, PartyIdentityDocumentEntity> implements PartyIdentityDocumentRepository {
 
     public PartyIdentityDocumentRepositoryImpl(
@@ -22,10 +27,10 @@ public class PartyIdentityDocumentRepositoryImpl extends AbstractPartyItemReposi
     @Override
     public void demotePrimary(Identifier partyIdentifier) {
         itemRepository.findByParty_PublicIdAndPrimaryTrueAndIsDeletedFalse(partyIdentifier.value())
-                .ifPresent(existing -> {
+                .ifPresentOrElse(existing -> {
                     existing.setPrimary(false);
                     itemRepository.save(existing);
-                });
+                }, () -> log.info("Does not exists Party Item available to demote for {}", partyIdentifier));
     }
 
 }

@@ -4,6 +4,14 @@ spring:
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
 
+  mvc:
+    # Erros no formato RFC 9457 (ProblemDetail) em vez do corpo de erro
+    # padrão do container. Autoconfigura um handler de exceções built-in
+    # com order 0 — um @RestControllerAdvice próprio deve usar order < 0
+    # para assumir o controle de alguma delas.
+    problemdetails:
+      enabled: true
+
 # Server Configuration
 server:
   port: ${SERVER_PORT:8080}

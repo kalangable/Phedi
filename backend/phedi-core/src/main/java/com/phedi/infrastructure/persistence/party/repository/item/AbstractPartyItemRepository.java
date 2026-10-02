@@ -14,6 +14,9 @@ import com.phedi.infrastructure.persistence.party.mapper.PersistenceMapper;
 import com.phedi.infrastructure.persistence.party.repository.base.AbstractPartyBaseRepository;
 import com.phedi.infrastructure.persistence.party.repository.base.PartyJpaRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j 
 public abstract class AbstractPartyItemRepository<DOMAIN extends PartyItem, ENTITY extends PartyItemEntity> extends AbstractPartyBaseRepository<DOMAIN, ENTITY> implements PartyItemRepository<DOMAIN> {
 
     protected final PartyItemJpaRepository<ENTITY> itemRepository;
@@ -39,8 +42,11 @@ public abstract class AbstractPartyItemRepository<DOMAIN extends PartyItem, ENTI
         }
 
         PartyEntity party = partyJpaRepository.findByPublicIdAndIsDeletedFalse(partyIdentifier.value())
-                .orElseThrow(() -> new RuntimeException(
-                        String.format("Party not found: %s", partyIdentifier.value())));
+                .orElseThrow(() -> {
+                    var msg = String.format("Party not found: %s", partyIdentifier.value());
+                    log.debug(msg);
+                    return new RuntimeException(msg);
+                });
 
         ENTITY entity = mapper.toEntity(item);
         entity.setParty(party);

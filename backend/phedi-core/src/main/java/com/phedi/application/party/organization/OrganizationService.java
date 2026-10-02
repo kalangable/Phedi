@@ -5,10 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phedi.application.party.item.PartyIdentityDocumentService;
+import com.phedi.domain.party.exception.ResourceNotFoundException;
 import com.phedi.domain.party.model.Identifier;
 import com.phedi.domain.party.model.Organization;
-import com.phedi.domain.party.model.item.PartyIdentityDocument;
 import com.phedi.domain.party.repository.OrganizationRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -18,39 +17,24 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class OrganizationService implements OrganizationCreationService, OrganizationUpdateService,
-        OrganizationDeletionService, OrganizationQueryService, OrganizationStatusChangeService {
+public class OrganizationService implements OrganizationCreationService, OrganizationUpdateService, OrganizationDeletionService, OrganizationQueryService, OrganizationStatusChangeService {
 
     private final OrganizationRepository organizationRepository;
-    private final PartyIdentityDocumentService partyIdentityDocumentService;
 
     @Override
     public Organization create(Organization organization) {
-        Organization created = organizationRepository.insert(organization);
-
-        // O insert devolve o objeto remontado a partir da entidade, que nao tem
-        // colecoes. Os documentos vem do objeto de entrada; o identificador
-        // gerado, do retorno.
-        Identifier partyIdentifier = created.getIdentifier();
-
-        for (PartyIdentityDocument document : organization.getDocuments()) {
-            partyIdentityDocumentService.createItem(partyIdentifier, document);
-        }
-
-        // createItem escreve o identificador no objeto que recebeu, ou seja no
-        // mesmo objeto de entrada. Devolve-lo no agregado criado evita responder
-        // "criei uma organizacao sem documentos" logo depois de ter criado tres.
-        created.setDocuments(organization.getDocuments());
-
-        return created;
+        return organizationRepository.insert(organization);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Organization findByIdentifier(Identifier identifier) {
         return organizationRepository.findByIdentifier(identifier)
-                .orElseThrow(() -> new RuntimeException(
-                        String.format("Organization not found: %s", identifier)));
+                .orElseThrow(() -> {
+                    var msg = String.format("Organization not found: %s", identifier.value());
+                    log.debug(msg);
+                    return new ResourceNotFoundException(msg);
+                    });
     }
 
     @Override
@@ -59,20 +43,18 @@ public class OrganizationService implements OrganizationCreationService, Organiz
         return organizationRepository.findAll();
     }
 
+    /**
+     * Atualiza uma organização existente.
+     *
+     * A existência do registro NÃO é verificada aqui: a delegação é pura e o
+     * repositório é quem rejeita a operação. {@code AbstractPartyBaseRepository.update}
+     * exige o identificador no domínio ({@code IllegalArgumentException} se
+     * ausente) e falha com {@link ResourceNotFoundException} quando a organização
+     * não existe. O serviço apenas propaga essas exceções.
+     */
     @Override
     public Organization update(Organization updatedOrganization) {
-
-        Organization existingOrganization = findByIdentifier(updatedOrganization.getIdentifier());
-
-        // Validate new identification if changed
-        checkUpdateRoles(updatedOrganization, existingOrganization);
-
         return organizationRepository.update(updatedOrganization);
-    }
-
-    protected void checkUpdateRoles(Organization updatedOrganization, Organization existingOrganization) {
-
-        log.info("Compare Organizations [{}] [{}]", updatedOrganization, existingOrganization);
     }
 
     @Override

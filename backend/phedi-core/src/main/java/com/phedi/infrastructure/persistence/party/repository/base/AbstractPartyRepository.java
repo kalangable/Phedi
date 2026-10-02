@@ -25,9 +25,7 @@ public abstract class AbstractPartyRepository<DOMAIN extends Party, ENTITY exten
 
     @Override
     public DOMAIN insert(DOMAIN domain) {
-        if (domain.getIdentifier() == null) {
-            domain.setIdentifier(publicIdGenerator.generate());
-        }
+        domain.setIdentifier(publicIdGenerator.generate());
 
         ENTITY entity = mapper.toEntity(domain);
 
