@@ -44,6 +44,18 @@
             <artifactId>phedi-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.instancio</groupId>
+            <artifactId>instancio-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- Hot restart em dev (spring-boot:run) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
